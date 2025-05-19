@@ -18,7 +18,7 @@ const Hero = () => {
                     Instantly generate personalized resume bullets, tailor-made cover letters, and track your job applications—all in one place.
                 </p>
                 <div className="mt-6 flex flex-col md:flex-row gap-4 justify-center md:justify-start">
-                    <Link href="/signup">
+                    <Link href="/sign-up">
                         <button className="border border-primary text-primary px-6 py-3 rounded-xl hover:bg-primary/10 transition">
 
                             <AnimatedShinyText>
