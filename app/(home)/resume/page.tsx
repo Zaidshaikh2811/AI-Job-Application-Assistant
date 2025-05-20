@@ -3,7 +3,7 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 import { DotPattern } from '@/components/magicui/dot-pattern'
-import { templates } from '@/components/templates'
+import { templateList } from '@/components/templates'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
@@ -22,7 +22,7 @@ const Page = () => {
                 <h1 className="text-4xl font-bold text-center">Select a Resume Template</h1>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {templates.map((template) => (
+                    {templateList.map((template) => (
                         <div
                             key={template.id}
                             className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-md hover:shadow-xl transition duration-300 overflow-hidden"
@@ -41,7 +41,7 @@ const Page = () => {
                                 </div>
 
                                 <Button
-                                    onClick={() => router.push(`/fill-details?template=${template.id}`)}
+                                    onClick={() => router.push(`/resume/create?template=${template.id}`)}
                                     className="w-full mt-2"
                                 >
                                     Use This Template

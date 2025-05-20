@@ -40,6 +40,7 @@ interface Certification {
 }
 
 interface ResumeData {
+    _id: string;
     personalName?: string;
     contactInformation: ContactInformation;
     location?: string;

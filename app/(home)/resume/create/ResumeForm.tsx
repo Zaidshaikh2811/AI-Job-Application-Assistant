@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { GridPattern } from "@/components/magicui/grid-pattern"
@@ -29,6 +29,8 @@ interface WorkExperience {
 
 export default function AddJobPage() {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const template = searchParams.get("template")
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     // Form state
@@ -242,6 +244,7 @@ export default function AddJobPage() {
                 ),
                 resumeFile: resumeFile ? resumeFile.name : null,
             }
+            console.log(data);
 
             // Using dummy data for demonstration
             const dummyData = {
@@ -275,7 +278,7 @@ export default function AddJobPage() {
                 resumeFilePresent: false
             };
 
-            console.log("Submitting data:", data);
+
 
             const response = await fetch('/api/generate-resume', {
                 method: 'POST',
@@ -293,7 +296,7 @@ export default function AddJobPage() {
             toast.dismiss(loadingToast)
             toast.success("Resume generated successfully!")
 
-            router.push(`resume/${resp.resumeData._id}`)
+            router.push(`/resume/${resp.resumeData._id}?template=${template}`)
 
         } catch (error) {
             console.error("Submission error:", error)
