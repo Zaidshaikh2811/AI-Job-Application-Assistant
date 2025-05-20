@@ -7,6 +7,7 @@ import { ResumeData } from '@/lib/types/resume';
 
 
 
+
 export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ data: ResumeData }>, image: string } } = {
     minimal: {
         id: 'minimal',
