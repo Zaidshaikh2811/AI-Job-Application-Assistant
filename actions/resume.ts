@@ -19,3 +19,7 @@ export const getIndividualResume = async (id: string) => {
 
     return resume;
 };
+
+
+
+

@@ -45,7 +45,7 @@ interface ResumeData {
     certifications?: Certification[] | string;
 }
 
-const ATSFriendlyResume = ({ data }: { data: ResumeData }) => (
+const ResumeTemplateMinimal = ({ data }: { data: ResumeData }) => (
     <div className="bg-white w-fit p-4 mt-20 mx-auto">
 
 
@@ -193,4 +193,4 @@ const ATSFriendlyResume = ({ data }: { data: ResumeData }) => (
     </div>
 );
 
-export default ATSFriendlyResume;
+export default ResumeTemplateMinimal;

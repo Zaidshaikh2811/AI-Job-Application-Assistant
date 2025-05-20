@@ -51,7 +51,7 @@ interface ResumeData {
     certifications?: Certification[] | string;
 }
 
-const ATSFriendlyResume = ({ data }: { data: ResumeData }) => {
+const ResumeTemplateCards = ({ data }: { data: ResumeData }) => {
     const pdfRef = useRef<HTMLDivElement>(null);
     console.log(data);
 
@@ -246,4 +246,4 @@ const ATSFriendlyResume = ({ data }: { data: ResumeData }) => {
     );
 };
 
-export default ATSFriendlyResume;
+export default ResumeTemplateCards;

@@ -20,7 +20,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         ...resumeData,
     };
 
-    const SelectedTemplate = templates["minimal"]; // or "minimal", "modern"
+    const SelectedTemplate = templates["modern"]; // or "minimal", "modern"
 
     return <SelectedTemplate
         data={resumeDataWithContact}

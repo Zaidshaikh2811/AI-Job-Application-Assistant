@@ -49,6 +49,7 @@ const Navbar = () => {
                         <Link href="/" className="text-foreground hover:text-primary transition">Home</Link>
                         <Link href="/about" className="text-foreground hover:text-primary transition">About</Link>
                         <Link href="/dashboard" className="text-foreground hover:text-primary transition">Projects</Link>
+                        <Link href="/resume" className="text-foreground hover:text-primary transition">Resume</Link>
                         <Link href="/contact" className="text-foreground hover:text-primary transition">Contact</Link>
                     </div>
                     <div className="md:hidden">
@@ -66,6 +67,7 @@ const Navbar = () => {
                     <Link href="/" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Home</Link>
                     <Link href="/about" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">About</Link>
                     <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Projects</Link>
+                    <Link href="/resume" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Resume</Link>
                     <Link href="/contact" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Contact</Link>
                 </div>
             )}
