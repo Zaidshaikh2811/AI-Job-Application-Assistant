@@ -78,7 +78,7 @@ export default function AddJobPage() {
         }
     }
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
 
         if (!jobTitle || !companyName || !jobDescription || !personalName || !email) {
@@ -103,9 +103,76 @@ export default function AddJobPage() {
             workExperiences,
             resumeFile,
         }
+
+        const dummyData = {
+            companyName: "TechNova Solutions",
+            jobLocation: "San Francisco, CA",
+            tone: "Professional",
+            jobDescription: `
+          We are looking for a Full Stack Developer with 3+ years of experience in JavaScript frameworks, RESTful APIs, and cloud infrastructure. The ideal candidate should have hands-on experience with React, Node.js, MongoDB, and CI/CD pipelines. Familiarity with Docker and Kubernetes is a plus.
+          Responsibilities include:
+          - Designing and building scalable web applications.
+          - Writing clean, maintainable code.
+          - Collaborating with cross-functional teams.
+          - Participating in code reviews and agile ceremonies.
+            `,
+            skills: [
+                "JavaScript",
+                "React",
+                "Node.js",
+                "MongoDB",
+                "Docker",
+                "Kubernetes",
+                "REST APIs",
+                "Git",
+                "CI/CD",
+                "AWS"
+            ],
+            education: "Bachelor of Technology in Computer Science, XYZ University, 2018",
+            certifications: "AWS Certified Developer – Associate",
+            projects: "SmartHome Dashboard – Developed a full-stack IoT-based dashboard using MERN stack for real-time device control and analytics.",
+            personalName: "John Doe",
+            email: "john.doe@example.com",
+            phone: "+1 (555) 123-4567",
+            linkedin: "https://linkedin.com/in/johndoe",
+            workExperiences: [
+                {
+                    title: "Full Stack Developer",
+                    company: "InnovateX Labs",
+                    startDate: "01/2021",
+                    endDate: "Present",
+                    description: "Built and maintained scalable microservices using Node.js and Docker. Led frontend development using React and improved performance by 35%. Integrated third-party APIs and optimized MongoDB queries for faster data access."
+                },
+                {
+                    title: "Software Engineer",
+                    company: "ByteForge Technologies",
+                    startDate: "06/2018",
+                    endDate: "12/2020",
+                    description: "Developed RESTful APIs and dynamic UIs for enterprise applications. Automated deployment processes using Jenkins and Docker. Collaborated with UX teams to improve user experience."
+                }
+            ],
+            resumeFilePresent: false
+        };
         console.log(data);
 
-        router.push("/add-job/preview")
+
+        const response = await fetch('/api/generate-resume', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dummyData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const resp = await response.json();
+
+
+
+        router.push(`resume/${resp.resumeData._id}`);
 
 
     }
