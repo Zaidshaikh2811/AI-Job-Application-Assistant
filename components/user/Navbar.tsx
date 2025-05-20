@@ -48,7 +48,7 @@ const Navbar = () => {
                         <ThemeToggle />
                         <Link href="/" className="text-foreground hover:text-primary transition">Home</Link>
                         <Link href="/about" className="text-foreground hover:text-primary transition">About</Link>
-                        <Link href="/projects" className="text-foreground hover:text-primary transition">Projects</Link>
+                        <Link href="/dashboard" className="text-foreground hover:text-primary transition">Projects</Link>
                         <Link href="/contact" className="text-foreground hover:text-primary transition">Contact</Link>
                     </div>
                     <div className="md:hidden">
@@ -61,11 +61,11 @@ const Navbar = () => {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden bg-white border-t border-gray-200 px-4 pb-4 space-y-2">
+                <div className="md:hidden e  border-t border-gray-200 px-4 pb-4 space-y-2">
                     <ThemeToggle />
                     <Link href="/" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Home</Link>
                     <Link href="/about" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">About</Link>
-                    <Link href="/projects" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Projects</Link>
+                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Projects</Link>
                     <Link href="/contact" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Contact</Link>
                 </div>
             )}
