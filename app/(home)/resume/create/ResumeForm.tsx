@@ -244,39 +244,7 @@ export default function AddJobPage() {
                 ),
                 resumeFile: resumeFile ? resumeFile.name : null,
             }
-            console.log(data);
 
-            // Using dummy data for demonstration
-            const dummyData = {
-                companyName: "TechNova Solutions",
-                jobLocation: "San Francisco, CA",
-                tone: "Professional",
-                jobDescription: `
-                    We are looking for a Full Stack Developer with 3+ years of experience in JavaScript frameworks.
-                    Responsibilities include:
-                    - Designing and building scalable web applications.
-                    - Writing clean, maintainable code.
-                    - Collaborating with cross-functional teams.
-                `,
-                skills: ["JavaScript", "React", "Node.js"],
-                education: "Bachelor of Technology in Computer Science",
-                certifications: "AWS Certified Developer",
-                projects: "SmartHome Dashboard – Developed a full-stack IoT-based dashboard",
-                personalName: "John Doe",
-                email: "john.doe@example.com",
-                phone: "+1 (555) 123-4567",
-                linkedin: "https://linkedin.com/in/johndoe",
-                workExperiences: [
-                    {
-                        title: "Full Stack Developer",
-                        company: "InnovateX Labs",
-                        startDate: "2021-01",
-                        endDate: "2023-12",
-                        description: "Built and maintained scalable microservices."
-                    }
-                ],
-                resumeFilePresent: false
-            };
 
 
 
@@ -285,7 +253,7 @@ export default function AddJobPage() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(dummyData),
+                body: JSON.stringify(data),
             });
 
             if (!response.ok) {

@@ -8,6 +8,8 @@ export async function POST(req: NextRequest) {
 
         await dbConnect();
         const rawJobData = await req.json();
+
+
         const generatedResponse = await generateResumeFromJobData(rawJobData)
         const cleanedResponse = generatedResponse
             .replace(/```json\n?/, '')  // remove starting ```json
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
                 linkedin: parsedData.contactInformation?.linkedin ?? null,
             },
         };
-        console.log(resumeData);
+
 
         const resume = await Resume.create(resumeData);
 

@@ -27,6 +27,8 @@ interface GenerateResumeParams {
 }
 
 export async function generateResumeFromJobData(params: GenerateResumeParams) {
+
+
     const {
         jobDescription,
         personalName,
@@ -132,6 +134,8 @@ Make sure the JSON is properly formatted and parsable.
 No extra explanation, only JSON.
 `;
 
+
+
     const ai = new GoogleGenAI({
         apiKey: process.env.GEMINI_API_KEY,
     });
@@ -160,5 +164,7 @@ No extra explanation, only JSON.
     });
 
 
+
     return (response.text ?? '').trim();
+
 }

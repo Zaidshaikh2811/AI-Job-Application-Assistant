@@ -54,7 +54,6 @@ interface ResumeData {
 
 const ResumeTemplateCards = ({ data }: { data: ResumeData }) => {
     const pdfRef = useRef<HTMLDivElement>(null);
-    console.log(data);
 
 
     const generatePdf = async () => {
