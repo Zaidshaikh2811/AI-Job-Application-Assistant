@@ -55,9 +55,8 @@ export default function DashboardPage() {
         <div className="relative w-full overflow-hidden min-h-screen bg-background">
             {/* Background Pattern */}
             <GridPattern
-
-                className="absolute top-0 left-0 w-full h-full text-gray-300 opacity-20 z-0 pointer-events-none" />
-
+                className="fixed inset-0 w-full h-full text-gray-300 opacity-20 z-0 pointer-events-none"
+            />
             <div className="relative z-10 p-6 max-w-6xl mx-auto space-y-10 mt-20">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
