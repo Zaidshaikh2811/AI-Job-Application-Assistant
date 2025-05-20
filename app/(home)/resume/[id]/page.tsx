@@ -1,17 +1,20 @@
 import { getIndividualResume } from '@/actions/resume';
 import { templateMap } from '@/components/templates';
 import React from 'react'
+import ResumePreview from './ResumePreview';
+import { ResumeData } from '@/lib/types/resume';
 
 const page = async ({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
     const { id } = await params;
     const resolvedSearchParams = await searchParams;
 
 
+
     const resumeDataRaw = await getIndividualResume(id);
     const resumeData = Array.isArray(resumeDataRaw) ? resumeDataRaw[0] : resumeDataRaw;
 
 
-    const resumeDataWithContact = {
+    const resumeDataWithContact: ResumeData = {
         summary: resumeData.summary ?? '',
         skills: resumeData.skills ?? [],
         workExperience: resumeData.workExperience ?? [],
@@ -33,10 +36,11 @@ const page = async ({ params, searchParams }: { params: Promise<{ id: string }>,
     }
     return <main className='mt-20'>
 
-        <SelectedTemplate.component
+        {/* <SelectedTemplate.component
             data={JSON.parse(JSON.stringify(resumeDataWithContact)) as typeof resumeDataWithContact}
 
-        />
+        /> */}
+        <ResumePreview data={JSON.parse(JSON.stringify(resumeDataWithContact)) as typeof resumeDataWithContact} templateType={templateType} />
     </main>
         ;
 

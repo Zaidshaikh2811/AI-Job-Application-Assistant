@@ -1,49 +1,6 @@
-interface ContactInformation {
-    personalName: string;
-    email: string;
-    phone: string;
-    linkedin?: string;
-}
+import { Certification, Education, Project, ResumeData, WorkExperience } from "@/lib/types/resume";
 
-interface WorkExperience {
-    jobTitle?: string;
-    title?: string;
-    startDate: string;
-    endDate?: string;
-    company: string;
-    location?: string;
-    description?: string | string[];
-}
 
-interface Education {
-    degree: string;
-    year: string;
-    institution: string;
-    gpa?: string;
-}
-
-interface Project {
-    name: string;
-    description: string;
-    technologies?: string[];
-}
-
-interface Certification {
-    name: string;
-    issuer: string;
-    date: string;
-}
-
-interface ResumeData {
-    contactInformation: ContactInformation;
-    location?: string;
-    summary?: string;
-    workExperience?: WorkExperience[];
-    skills?: string[];
-    education?: Education[] | string;
-    projects?: Project[] | string;
-    certifications?: Certification[] | string;
-}
 
 const ResumeTemplateMinimal = ({ data }: { data: ResumeData }) => (
     <div className="bg-white w-fit p-4 mt-20 mx-auto">
@@ -102,9 +59,12 @@ const ResumeTemplateMinimal = ({ data }: { data: ResumeData }) => (
                                         ? we.description.split('\n').filter(Boolean).map((desc: string, idx: number) => (
                                             <li key={idx}>{desc}</li>
                                         ))
-                                        : we.description.map((desc: string, idx: number) => (
-                                            <li key={idx}>{desc}</li>
-                                        ))
+                                        : (Array.isArray(we.description)
+                                            ? (we.description as string[]).map((desc: string, idx: number) => (
+                                                <li key={idx}>{desc}</li>
+                                            ))
+                                            : null
+                                        )
                                     }
                                 </ul>
                             )}

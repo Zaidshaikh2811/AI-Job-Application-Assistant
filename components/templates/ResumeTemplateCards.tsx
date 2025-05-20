@@ -1,106 +1,19 @@
-"use client"
 
-import React, { useRef } from "react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { Certification, Education, Project, ResumeData, WorkExperience } from "@/lib/types/resume";
 
-interface ContactInformation {
-    name: string;
-    email: string;
-    phone: string;
-    linkedin?: string;
-}
-
-interface WorkExperience {
-    title: string;
-    company: string;
-    location?: string;
-    startDate: string;
-    endDate?: string;
-    description?: string;
-}
-
-interface Education {
-    degree: string;
-    institution: string;
-    year: string;
-    gpa?: string;
-}
-
-interface Project {
-    name: string;
-    description: string;
-    technologies?: string[];
-}
-
-interface Certification {
-    name: string;
-    issuer: string;
-    date: string;
-}
-
-interface ResumeData {
-    _id: string;
-    personalName?: string;
-    contactInformation: ContactInformation;
-    location?: string;
-    summary?: string;
-    workExperience?: WorkExperience[];
-    skills?: string[];
-    education?: Education[] | string;
-    projects?: Project[] | string;
-    certifications?: Certification[] | string;
-}
 
 const ResumeTemplateCards = ({ data }: { data: ResumeData }) => {
-    const pdfRef = useRef<HTMLDivElement>(null);
 
 
-    const generatePdf = async () => {
-        if (!pdfRef.current) return;
 
-        const element = pdfRef.current;
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            logging: false,
-            useCORS: true
-        });
-        const imgData = canvas.toDataURL("image/png");
-
-        const pdf = new jsPDF({
-            orientation: "portrait",
-            unit: "pt",
-            format: "a4",
-        });
-
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${(data.personalName ?? "Resume").replace(/\s+/g, '_')}_Resume.pdf`);
-    };
 
     return (
-        <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
-            <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold text-gray-800">ATS-Friendly Resume</h1>
-                <button
-                    onClick={generatePdf}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md flex items-center gap-2"
-                    aria-label="Download resume as PDF"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                    Download PDF
-                </button>
-            </div>
+        <div className="w-fit mx-auto   bg-gray-50 h-fit">
 
-            {/* ATS-Optimized Resume Content */}
+
             <div
                 className="bg-white p-8 rounded-lg shadow-md font-sans text-gray-800"
-                ref={pdfRef}
+
                 style={{
                     lineHeight: 1.5,
                     fontSize: '12pt'

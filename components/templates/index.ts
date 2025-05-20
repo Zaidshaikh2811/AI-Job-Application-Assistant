@@ -1,10 +1,13 @@
 // src/resumeTemplates/index.ts
 
 import ResumeTemplateMinimal from './ResumeTemplateMinimal'
-import ResumeTemplateClassic from './ResumeTemplateClassic'
 import ResumeTemplateCards from './ResumeTemplateCards'
+import { ResumeData } from '@/lib/types/resume';
 
-export const templateMap = {
+
+
+
+export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ data: ResumeData }>, image: string } } = {
     minimal: {
         id: 'minimal',
         name: 'Minimal',
@@ -17,16 +20,10 @@ export const templateMap = {
         component: ResumeTemplateCards,
         image: '/modern.png',
     },
-    creative: {
-        id: 'creative',
-        name: 'Creative',
-        component: ResumeTemplateClassic,
-        image: '/classic.png',
-    },
 } as const;
 
 export type TemplateId = keyof typeof templateMap;
 
-export const templateList = Object.values(templateMap); // for showing all templates (if needed)
+export const templateList = Object.values(templateMap);
 
 export type ResumeTemplate = typeof templateMap[TemplateId];
