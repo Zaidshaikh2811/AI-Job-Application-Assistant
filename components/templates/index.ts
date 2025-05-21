@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/resumeTemplates/index.ts
 
 import ResumeTemplateMinimal from './ResumeTemplateMinimal'
 import ResumeTemplateCards from './ResumeTemplateCards'
-import { ResumeData } from '@/lib/types/resume';
+import MonospaceFriendly from './MonospaceFriendly'
+import ResumeTableLayout from './ResumeTableLayout'
 
 
 
 
 
-export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ data: ResumeData }>, image: string } } = {
+export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ data: any }>, image: string } } = {
     minimal: {
         id: 'minimal',
         name: 'Minimal',
@@ -19,6 +21,18 @@ export const templateMap: { [key: string]: { id: string, name: string, component
         id: 'modern',
         name: 'Modern',
         component: ResumeTemplateCards,
+        image: '/modern.png',
+    },
+    monorepo: {
+        id: 'monorepo',
+        name: ' monorepo',
+        component: MonospaceFriendly,
+        image: '/modern.png',
+    },
+    resumetable: {
+        id: 'resumetable',
+        name: 'resumetable',
+        component: ResumeTableLayout,
         image: '/modern.png',
     },
 } as const;
