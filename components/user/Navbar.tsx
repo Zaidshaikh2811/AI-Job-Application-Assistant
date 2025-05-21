@@ -51,6 +51,7 @@ const Navbar = () => {
                         <Link href="/dashboard" className="text-foreground hover:text-primary transition">Projects</Link>
                         <Link href="/resume" className="text-foreground hover:text-primary transition">Resume</Link>
                         <Link href="/contact" className="text-foreground hover:text-primary transition">Contact</Link>
+                        <Link href="/profile" className="text-foreground hover:text-primary transition">Profile</Link>
                     </div>
                     <div className="md:hidden">
                         <button onClick={toggleMenu} aria-label="Toggle menu">
@@ -69,6 +70,7 @@ const Navbar = () => {
                     <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Projects</Link>
                     <Link href="/resume" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Resume</Link>
                     <Link href="/contact" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Contact</Link>
+                    <Link href="/profile" onClick={() => setIsOpen(false)} className="block text-foreground hover:text-primary">Profile</Link>
                 </div>
             )}
         </nav>
