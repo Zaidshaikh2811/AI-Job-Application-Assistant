@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import React from 'react'
+import React from 'react';
 
 const MonospaceFriendly = ({ data }: { data: any }) => {
     console.log(data);
 
+    const renderListOrString = (value: any) => {
+        if (Array.isArray(value)) {
+            return value.join(', ');
+        }
+        return value;
+    };
+
     return (
-        <div className="font-mono text-sm p-6 bg-white">
+        <div className="font-mono text-sm p-6 bg-white text-black">
             {/* Contact Info */}
             {data.contactInformation?.personalName && (
                 <h1 className="text-center text-xl font-bold mb-2">
@@ -30,10 +36,10 @@ const MonospaceFriendly = ({ data }: { data: any }) => {
             )}
 
             {/* Experience */}
-            {data.workExperience && data.workExperience.length > 0 && (
+            {Array.isArray(data.workExperience) && data.workExperience.length > 0 && (
                 <>
                     <h2 className="border-b font-semibold mb-1">Experience</h2>
-                    {data.workExperience.map((we: any, i: any) => (
+                    {data.workExperience.map((we: any, i: number) => (
                         <div key={i} className="mb-3">
                             <p>{we.title} - {we.company}</p>
                             <p>{we.startDate} - {we.endDate || 'Present'} | {we.location}</p>
@@ -49,7 +55,7 @@ const MonospaceFriendly = ({ data }: { data: any }) => {
             {Array.isArray(data.education) && data.education.length > 0 && (
                 <>
                     <h2 className="border-b font-semibold mb-1">Education</h2>
-                    {data.education.map((edu: any, i: any) => (
+                    {data.education.map((edu: any, i: number) => (
                         <div key={i} className="mb-2">
                             <p>{edu.degree} - {edu.institution}</p>
                             <p>
@@ -61,12 +67,11 @@ const MonospaceFriendly = ({ data }: { data: any }) => {
                 </>
             )}
 
-
             {/* Certifications */}
-            {data.certifications && data.certifications.length > 0 && (
+            {Array.isArray(data.certifications) && data.certifications.length > 0 && (
                 <>
                     <h2 className="border-b font-semibold mb-1">Certifications</h2>
-                    {data.certifications.map((cert: any, i: any) => (
+                    {data.certifications.map((cert: any, i: number) => (
                         <div key={i} className="mb-2">
                             <p>{cert.name} - {cert.issuer}</p>
                             <p>{cert.date}</p>
@@ -76,14 +81,14 @@ const MonospaceFriendly = ({ data }: { data: any }) => {
             )}
 
             {/* Skills */}
-            {data.skills && data.skills.length > 0 && (
+            {(Array.isArray(data.skills) && data.skills.length > 0) || typeof data.skills === 'string' ? (
                 <>
                     <h2 className="border-b font-semibold mb-1">Skills</h2>
-                    <p className="mb-2">{data.skills.join(', ')}</p>
+                    <p className="mb-2">{renderListOrString(data.skills)}</p>
                 </>
-            )}
+            ) : null}
         </div>
-    )
-}
+    );
+};
 
-export default MonospaceFriendly
+export default MonospaceFriendly;
