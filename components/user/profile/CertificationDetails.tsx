@@ -51,7 +51,7 @@ const CertificationDetails = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             {certifications.map((cert, index) => (
                 <div
                     key={index}

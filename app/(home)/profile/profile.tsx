@@ -64,7 +64,7 @@ export default function ProfilePage() {
                         className="block md:hidden border-b border-border/30 bg-background/90"
                     >
                         <div className="w-full overflow-x-auto scrollbar-hide">
-                            <TabsList className="flex flex-row gap-1 p-2 w-max min-w-full">
+                            <TabsList className="flex flex-row gap-1 p-4 w-max min-w-full">
                                 {[
                                     { value: "personal", label: "Personal" },
                                     { value: "summary", label: "Summary" },
@@ -84,7 +84,7 @@ export default function ProfilePage() {
                                     <TabsTrigger
                                         key={item.value}
                                         value={item.value}
-                                        className="flex-shrink-0 justify-center py-2 px-3 text-xs rounded-md transition-all hover:bg-muted/50 data-[state=active]:bg-primary data-[state=active]:text-white"
+                                        className="flex-shrink-0 justify-center py-4 px-3 text-xs rounded-md transition-all hover:bg-muted/50 data-[state=active]:bg-primary data-[state=active]:text-white"
                                     >
                                         {item.label}
                                     </TabsTrigger>

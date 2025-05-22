@@ -30,7 +30,7 @@ const Education = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             <h1 className="text-2xl font-bold">Education Details</h1>
             < div className="grid grid-cols-1 md:grid-cols-2 gap-4" >
                 <div>

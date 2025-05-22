@@ -43,7 +43,7 @@ const AwardDetails = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             {awards.map((award, index) => (
                 <div
                     key={index}

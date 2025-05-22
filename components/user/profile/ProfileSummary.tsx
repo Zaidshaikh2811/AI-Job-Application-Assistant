@@ -15,7 +15,7 @@ const ProfileSummary = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             <Label htmlFor="summary" className="text-base font-medium">
                 Profile Summary
             </Label>

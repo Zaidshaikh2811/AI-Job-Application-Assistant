@@ -49,7 +49,7 @@ const ProfessionalExperience = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             {experiences.map((exp, index) => (
                 <div key={index} className="space-y-4 border p-4 rounded-md">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

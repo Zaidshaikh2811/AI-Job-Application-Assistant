@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
 
 type PersonalDetailsForm = {
     fullName: string;
@@ -60,7 +61,7 @@ export default function PersonalDetails() {
     }
 
     return (
-        <form className="space-y-8 p-6 w-full">
+        <form className="space-y-8 p-0 md:p-6 w-full">
             <h2 className="text-2xl font-bold">Personal Details</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 ">
@@ -128,6 +129,14 @@ export default function PersonalDetails() {
                         placeholder="Other details"
                     />
                 </div>
+            </div>
+            <div>
+                <Button
+                    type="submit"
+                    className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition duration-200 cursor-pointer"
+                >
+                    Save Changes
+                </Button>
             </div>
         </form>
     )

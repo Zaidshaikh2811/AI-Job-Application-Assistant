@@ -25,7 +25,7 @@ const Declaration = () => {
     }
 
     return (
-        <div className="space-y-8 p-6 w-full">
+        <div className="space-y-8 p-0 md:p-6 w-full">
             <div>
                 <Label className="mb-2">Declaration Text</Label>
                 < Textarea

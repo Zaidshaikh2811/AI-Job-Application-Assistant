@@ -41,7 +41,7 @@ const LanguageDetails = () => {
     }
 
     return (
-        <div className="space-y-6 w-full  ">
+        <div className="space-y-6 p-0 md:p-6 w-full  ">
             {languages.map((lang, index) => (
                 <div key={index} className="border p-4 rounded-md space-y-4">
                     <div className="flex flex-col md:flex-row items-center gap-4">
