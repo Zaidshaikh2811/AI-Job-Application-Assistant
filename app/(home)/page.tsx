@@ -11,7 +11,7 @@ export default function Home() {
       <AnimatedGridPattern className="fixed inset-0 w-screen h-screen z-0 opacity-20" />
 
       {/* Content layered above animation */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 ">
         <Hero />
         <Feature />
         <DemoVideo />

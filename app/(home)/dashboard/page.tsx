@@ -57,7 +57,7 @@ export default function DashboardPage() {
             <GridPattern
                 className="fixed inset-0 w-full h-full text-gray-300 opacity-20 z-0 pointer-events-none"
             />
-            <div className="relative z-10 p-6 max-w-6xl mx-auto space-y-10 mt-20">
+            <div className="relative z-10 p-6 max-w-6xl mx-auto space-y-10  ">
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <h1 className="text-4xl font-bold tracking-tight font-display text-primary">

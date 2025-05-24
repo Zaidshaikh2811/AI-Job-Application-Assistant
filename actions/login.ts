@@ -1,5 +1,6 @@
 "use server"
 
+import { sendOtpEmailFunc } from "@/lib/email";
 import User from "@/lib/models/User";
 import UserProfile from "@/lib/models/profile";
 import dbConnect from "@/lib/mongodb";
@@ -69,7 +70,15 @@ export async function validateOtp(email: string, otp: string): Promise<OtpValida
 // Dummy email sender stub (replace with real email service)
 async function sendOtpEmail(email: string, otp: string) {
     console.log(`Sending OTP ${otp} to email: ${email}`);
-    // Use your email provider SDK here (e.g., nodemailer, SendGrid, etc.)
+    try {
+
+        await sendOtpEmailFunc(email, otp);
+        return { success: true };
+
+    } catch (error) {
+        console.error("Failed to send OTP email:", error);
+        throw new Error("Failed to send OTP email");
+    }
 }
 
 
@@ -164,5 +173,16 @@ export async function signupWithOtp(
 
     } catch (error) {
         return { success: false, error: (error as Error).message };
+    }
+}
+
+
+export async function logoutUser(): Promise<void> {
+    try {
+        const cookieStore = await cookies();
+        cookieStore.delete('token');
+
+    } catch (error) {
+        console.error("Error logging out user:", error);
     }
 }

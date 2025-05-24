@@ -8,7 +8,7 @@ import Link from "next/link"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-// import { useAuth } from "@/context/AuthContext"
+import { useAuth } from "@/context/AuthContext"
 import { loginUser, signupWithOtp } from "@/actions/login"
 
 
@@ -19,7 +19,7 @@ interface AuthFormProps {
 }
 
 export function LoginForm({ type, className }: AuthFormProps) {
-  // const { login } = useAuth();
+  const { login } = useAuth();
   const router = useRouter()
   const isLogin = type === "login"
   const [formData, setFormData] = useState({
@@ -54,9 +54,11 @@ export function LoginForm({ type, className }: AuthFormProps) {
       response = await loginUser(email, password)
       if (response.success) {
         setSuccess(true)
-        // login(response.data.token)  
 
-        console.log(response);
+        if (response.data && response.data.token) {
+          login(response.data.token)
+        }
+
         router.push("/dashboard") // or wherever you want to redirect after login
       } else {
         setError(response.error ?? "An unknown error occurred.")
@@ -68,7 +70,7 @@ export function LoginForm({ type, className }: AuthFormProps) {
         setSuccess(true)
         console.log(response);
 
-        // router.push(`/sign-up/${response.data.data}`) 
+        router.push(`/sign-up/otp`)
       } else {
         setError(response.error ?? "An unknown error occurred.")
       }

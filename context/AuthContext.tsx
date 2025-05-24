@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useState } from 'react';
 type AuthContextType = {
     token: string | null;
     login: (token: string) => void;
-    logout: () => void;
     getToken: () => string | null;
 };
 
@@ -27,17 +26,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(token);
     };
 
-    const logout = () => {
-        localStorage.removeItem('authToken');
-        setToken(null);
-    };
 
     const getToken = () => {
         return localStorage.getItem('authToken');
     };
 
     return (
-        <AuthContext.Provider value={{ token, login, logout, getToken }}>
+        <AuthContext.Provider value={{ token, login, getToken }}>
             {children}
         </AuthContext.Provider>
     );
