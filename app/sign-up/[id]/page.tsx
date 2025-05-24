@@ -1,180 +1,88 @@
 "use client"
 
-import { cn } from "@/lib/utils"
+import { useState } from "react"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { signupUser } from "@/lib/api/auth"
-import { useState, useEffect } from "react"
-import confetti from "canvas-confetti"
-import { useParams } from "next/navigation"
+import { Label } from "@/components/ui/label"
+import { validateOtp } from "@/actions/login"
 
-export default function Page() {
-
-    const params = useParams()
-    const id = typeof params.id === "string" ? params.id : Array.isArray(params.id) ? params.id[0] : undefined;
+export default function OtpPage() {
 
 
 
-    const [formData, setFormData] = useState({
-        password: '',
-        confirmPassword: '',
-        username: '',
-    })
-
-    const [error, setError] = useState('')
-    const [success, setSuccess] = useState(false)
+    const [otp, setOtp] = useState("")
     const [loading, setLoading] = useState(false)
-    console.log(success);
-
-    useEffect(() => {
-        if (success) {
-            const end = Date.now() + 3 * 1000; // 3 seconds
-            const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
-
-            const frame = () => {
-                if (Date.now() > end) return;
-
-                confetti({
-                    particleCount: 2,
-                    angle: 60,
-                    spread: 55,
-                    startVelocity: 60,
-                    origin: { x: 0, y: 0.5 },
-                    colors: colors,
-                });
-                confetti({
-                    particleCount: 2,
-                    angle: 120,
-                    spread: 55,
-                    startVelocity: 60,
-                    origin: { x: 1, y: 0.5 },
-                    colors: colors,
-                });
-
-                requestAnimationFrame(frame);
-            };
-
-            frame();
-        }
-    }, [success])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prev => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }))
-    }
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
-        setError('')
+        setError("")
+        setSuccess(false)
 
-        const { password, confirmPassword, username } = formData
-
-        try {
-            const response = await signupUser(password, confirmPassword, username, id as string)
-            console.log(response);
-
-            if (response.success) {
-
-
-                setSuccess(true)
-
-                setTimeout(() => {
-                    window.location.href = "/dashboard"
-                }, 3000);
-
-            } else {
-                setError(response.error || "Signup failed.")
-            }
-        } catch (err) {
-            console.error(err)
-            setError("Something went wrong. Please try again.")
+        if (!otp || otp.length !== 6) {
+            setError("Please enter a valid 6-digit OTP.")
+            return
         }
 
-        setLoading(false)
-    }
+
+        const email = localStorage.getItem("otp_email");
+
+        if (!email) {
+            setError("Session expired. Please sign up again.");
+            setLoading(false);
+            return;
+        }
 
 
-
-
-    if (!id) {
-        return <div>Invalid ID</div>
+        try {
+            setLoading(true)
+            const res = await validateOtp(email, otp)
+            if (res.success) {
+                setSuccess(true)
+                setTimeout(() => {
+                    window.location.href = "/login"
+                }, 2000)
+            } else {
+                setError(res.error || "Invalid OTP")
+            }
+        } catch {
+            setError("Something went wrong.")
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-muted px-4 relative">
+        <div className="min-h-screen flex items-center justify-center px-4 bg-muted">
             <form
                 onSubmit={handleSubmit}
-                className={cn(
-                    " shadow-md rounded-2xl p-8 w-full max-w-md flex flex-col gap-6 relative z-10"
-                )}
+                className="bg-background p-6 rounded-xl shadow-md w-full max-w-sm space-y-6"
             >
-                <h1 className="text-2xl font-semibold text-center text-foreground">
-                    Create a Password
-                </h1>
+                <h1 className="text-2xl font-semibold text-center">Verify OTP</h1>
 
-                <div className="grid gap-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Username</Label>
-                        <Input
-                            id="username"
-                            name="username"
-                            type="text"
-                            value={formData.username}
-                            onChange={handleChange}
-                            placeholder="Enter username"
-                            required
-                        />
-
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Enter password"
-                            required
-                        />
-                        <p className="text-xs text-muted-foreground">
-                            Password must be at least 8 characters.
-                        </p>
-                    </div>
-
-                    <div className="grid gap-2">
-                        <Label htmlFor="confirmPassword">Confirm Password</Label>
-                        <Input
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            placeholder="Re-enter password"
-                            required
-                        />
-                    </div>
+                <div className="space-y-2">
+                    <Label htmlFor="otp">Enter the 6-digit OTP sent to your email</Label>
+                    <Input
+                        id="otp"
+                        name="otp"
+                        type="text"
+                        maxLength={6}
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        placeholder="123456"
+                        required
+                    />
                 </div>
 
-                <Button
-                    type="submit"
-                    className="w-full font-medium text-base"
-                    disabled={loading}
-                >
-                    {loading ? "Creating..." : "Set Password"}
+                <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Verifying..." : "Verify OTP"}
                 </Button>
 
-                {/* Messages */}
-                {error && (
-                    <p className="text-sm text-red-500 text-center mt-2">{error}</p>
-                )}
+                {error && <p className="text-sm text-red-500 text-center">{error}</p>}
                 {success && (
-                    <p className="text-sm text-green-600 text-center mt-2">
-                        Success! Redirecting...
+                    <p className="text-sm text-green-600 text-center">
+                        OTP verified! Redirecting...
                     </p>
                 )}
             </form>

@@ -5,9 +5,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "./ui/button"
 import Link from "next/link"
-import { loginUser, sendMagicLink } from "@/lib/api/auth"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+// import { useAuth } from "@/context/AuthContext"
+import { loginUser, signupWithOtp } from "@/actions/login"
+
 
 
 interface AuthFormProps {
@@ -16,6 +19,7 @@ interface AuthFormProps {
 }
 
 export function LoginForm({ type, className }: AuthFormProps) {
+  // const { login } = useAuth();
   const router = useRouter()
   const isLogin = type === "login"
   const [formData, setFormData] = useState({
@@ -50,17 +54,21 @@ export function LoginForm({ type, className }: AuthFormProps) {
       response = await loginUser(email, password)
       if (response.success) {
         setSuccess(true)
+        // login(response.data.token)  
+
+        console.log(response);
         router.push("/dashboard") // or wherever you want to redirect after login
       } else {
         setError(response.error ?? "An unknown error occurred.")
       }
     } else {
-      response = await sendMagicLink(name, email, password, confirmPassword)
+      response = await signupWithOtp(name, email, password, confirmPassword)
       if (response.success) {
+        localStorage.setItem('otp_email', email);
         setSuccess(true)
-        console.log(response.data.data);
+        console.log(response);
 
-        router.push(`/sign-up/${response.data.data}`) // dynamic route after signup
+        // router.push(`/sign-up/${response.data.data}`) 
       } else {
         setError(response.error ?? "An unknown error occurred.")
       }
