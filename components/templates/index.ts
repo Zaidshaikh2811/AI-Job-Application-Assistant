@@ -5,6 +5,7 @@ import ResumeTemplateMinimal from './ResumeTemplateMinimal'
 import ResumeTemplateCards from './ResumeTemplateCards'
 import MonospaceFriendly from './MonospaceFriendly'
 import ResumeTableLayout from './ResumeTableLayout'
+import { ModernTemplate } from './ModernTemplate';
 
 
 
@@ -33,6 +34,12 @@ export const templateMap: { [key: string]: { id: string, name: string, component
         id: 'resumetable',
         name: 'resumetable',
         component: ResumeTableLayout,
+        image: '/modern.png',
+    },
+    ModernTemplate: {
+        id: 'ModernTemplate',
+        name: 'ModernTemplate',
+        component: ModernTemplate,
         image: '/modern.png',
     },
 } as const;

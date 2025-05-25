@@ -7,6 +7,7 @@ type AuthContextType = {
     token: string | null;
     login: (token: string) => void;
     getToken: () => string | null;
+    logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,13 +27,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(token);
     };
 
+    const logout = () => {
+        localStorage.removeItem('authToken');
+        setToken(null);
+    };
+
 
     const getToken = () => {
         return localStorage.getItem('authToken');
     };
 
     return (
-        <AuthContext.Provider value={{ token, login, getToken }}>
+        <AuthContext.Provider value={{ token, logout, login, getToken }}>
             {children}
         </AuthContext.Provider>
     );

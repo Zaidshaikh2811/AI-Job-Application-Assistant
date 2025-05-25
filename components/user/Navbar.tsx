@@ -17,7 +17,8 @@ import { logoutUser } from '@/actions/login'
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const { setTheme } = useTheme()
-    const { token } = useAuth()
+    const { token, logout } = useAuth()
+
 
     const toggleMenu = () => setIsOpen(!isOpen)
 
@@ -48,7 +49,7 @@ const Navbar = () => {
                     <Link href="/dashboard" className="text-foreground hover:text-primary transition">Projects</Link>
                     <Link href="/resume" className="text-foreground hover:text-primary transition">Resume</Link>
                     <Link href="/profile" className="text-foreground hover:text-primary transition">Profile</Link>
-                    <Button variant="ghost" onClick={() => { logoutUser(); window.location.reload(); }} className="text-destructive hover:text-red-500 flex items-center gap-1">
+                    <Button variant="ghost" onClick={() => { logoutUser(); logout(); window.location.reload(); }} className="text-destructive hover:text-red-500 flex items-center gap-1">
                         <LogOut size={16} /> Logout
                     </Button>
                 </>

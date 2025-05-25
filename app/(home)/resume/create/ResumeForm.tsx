@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Upload, FileText, Link, Briefcase } from "lucide-react"
 import { getUserFullData } from "@/actions/user"
+import { toast } from "sonner"
+import ResumeData from "./ResumeData"
 
 export default function SimplifiedJobForm() {
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -15,6 +17,11 @@ export default function SimplifiedJobForm() {
     const [jobDescription, setJobDescription] = useState("")
     const [jobLink, setJobLink] = useState("")
     const [resumeFile, setResumeFile] = useState<File | null>(null)
+    const [showResume, setShowResume] = useState(false)
+    const [generatedResumeData, setGeneratedResumeData] = useState(null)
+
+
+
 
     // Handle resume file upload
     function handleResumeUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -103,10 +110,13 @@ export default function SimplifiedJobForm() {
             if (!response.ok) {
                 throw new Error("Network response was not ok")
             }
+            const responseData = await response.json()
+            console.log("Response Data:", responseData);
 
-            console.log("Form data:", data)
-            alert("Application submitted successfully!")
 
+            toast.success("Application submitted successfully!")
+            setGeneratedResumeData(responseData)
+            setShowResume(true)
             // Reset form
             setJobTitle("")
             setJobDescription("")
@@ -119,6 +129,18 @@ export default function SimplifiedJobForm() {
         } finally {
             setIsSubmitting(false)
         }
+    }
+
+
+    // Add this function to handle going back to the form
+    const handleBackToForm = () => {
+        setShowResume(false);
+        setGeneratedResumeData(null);
+    };
+    console.log(showResume + "" + generatedResumeData);
+
+    if (showResume && generatedResumeData) {
+        return (<ResumeData data={generatedResumeData} onBack={handleBackToForm} />)
     }
 
     return (
