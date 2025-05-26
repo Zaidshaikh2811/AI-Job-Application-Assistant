@@ -40,7 +40,7 @@ const Navbar = () => {
     )
 
     const navLinks = (
-        <>
+        <div className="flex space-x-4   flex-col">
             <Link href="/" className="text-foreground hover:text-primary transition">Home</Link>
             <Link href="/about" className="text-foreground hover:text-primary transition">About</Link>
             <Link href="/contact" className="text-foreground hover:text-primary transition">Contact</Link>
@@ -54,7 +54,7 @@ const Navbar = () => {
                     </Button>
                 </>
             )}
-        </>
+        </div>
     )
 
     return (
@@ -81,9 +81,28 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden border-t border-gray-200 px-4 pb-4 space-y-2">
                     <ThemeToggle />
-                    {React.Children.map(navLinks.props.children, child => (
-                        React.cloneElement(child, { onClick: () => setIsOpen(false) })
-                    ))}
+                    <div
+                        className="flex space-x-4 flex-col"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        <Link href="/" className="text-foreground hover:text-primary transition">Home</Link>
+                        <Link href="/about" className="text-foreground hover:text-primary transition">About</Link>
+                        <Link href="/contact" className="text-foreground hover:text-primary transition">Contact</Link>
+                        {token && (
+                            <>
+                                <Link href="/dashboard" className="text-foreground hover:text-primary transition">Projects</Link>
+                                <Link href="/resume" className="text-foreground hover:text-primary transition">Resume</Link>
+                                <Link href="/profile" className="text-foreground hover:text-primary transition">Profile</Link>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => { logoutUser(); logout(); window.location.reload(); }}
+                                    className="text-destructive hover:text-red-500 flex items-center gap-1"
+                                >
+                                    <LogOut size={16} /> Logout
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </div>
             )}
         </nav>
