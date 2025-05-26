@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Upload, FileText, Link, Briefcase } from "lucide-react"
 import { getUserFullData } from "@/actions/user"
 import { toast } from "sonner"
-import ResumeData from "./ResumeData"
+import { ResumeData } from "./ResumeData"
 
 export default function SimplifiedJobForm() {
     const [isSubmitting, setIsSubmitting] = useState(false)
