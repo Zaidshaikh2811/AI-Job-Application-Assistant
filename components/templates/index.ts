@@ -1,51 +1,63 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/resumeTemplates/index.ts
 
-import ResumeTemplateMinimal from './ResumeTemplateMinimal'
-import ResumeTemplateCards from './ResumeTemplateCards'
-import MonospaceFriendly from './MonospaceFriendly'
-import ResumeTableLayout from './ResumeTableLayout'
-import { ModernTemplate } from './ModernTemplate';
+import { ClassicBlueTemplate } from "./ClassicBlueTemplate";
+import { CreativeTwoColumnTemplate } from "./CreativeTwoColumnTemplate ";
+import { ExecutiveTemplate } from "./ExecutiveTemplate";
+import { MinimalistTemplate } from "./MinimalistTemplate";
+import { ModernDarkTemplate } from "./ModernDarkTemplate";
+import ResumeFirst from "./ResumeFirst";
 
 
 
 
 
-export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ data: any }>, image: string } } = {
+
+export const templateMap: { [key: string]: { id: string, name: string, component: React.FC<{ resumeData: any }>, image: string } } = {
     minimal: {
-        id: 'minimal',
-        name: 'Minimal',
-        component: ResumeTemplateMinimal,
+        id: 'first',
+        name: 'first',
+        component: ResumeFirst,
         image: '/minimal.png',
     },
-    modern: {
-        id: 'modern',
-        name: 'Modern',
-        component: ResumeTemplateCards,
-        image: '/modern.png',
+    ClassicBlueTemplate: {
+        id: 'ClassicBlueTemplate',
+        name: 'ClassicBlueTemplate',
+        component: ClassicBlueTemplate,
+        image: '/minimal.png',
     },
-    monorepo: {
-        id: 'monorepo',
-        name: ' monorepo',
-        component: MonospaceFriendly,
-        image: '/modern.png',
+    ModernDarkTemplate: {
+        id: 'ModernDarkTemplate',
+        name: 'ModernDarkTemplate',
+        component: ModernDarkTemplate,
+        image: '/minimal.png',
     },
-    resumetable: {
-        id: 'resumetable',
-        name: 'resumetable',
-        component: ResumeTableLayout,
-        image: '/modern.png',
+    MinimalistTemplate: {
+        id: 'MinimalistTemplate',
+        name: 'MinimalistTemplate',
+        component: MinimalistTemplate,
+        image: '/minimal.png',
     },
-    ModernTemplate: {
-        id: 'ModernTemplate',
-        name: 'ModernTemplate',
-        component: ModernTemplate,
-        image: '/modern.png',
+    CreativeTwoColumnTemplate: {
+        id: 'CreativeTwoColumnTemplate',
+        name: 'CreativeTwoColumnTemplate',
+        component: CreativeTwoColumnTemplate,
+        image: '/minimal.png',
+    },
+    ExecutiveTemplate: {
+        id: 'ExecutiveTemplate',
+        name: 'ExecutiveTemplate',
+        component: ExecutiveTemplate,
+        image: '/minimal.png',
     },
 } as const;
 
-export type TemplateId = keyof typeof templateMap;
+export const templateList = Object.values(templateMap).map(template => ({
+    id: template.id,
+    name: template.name,
+    image: template.image,
+}));
 
-export const templateList = Object.values(templateMap);
-
-export type ResumeTemplate = typeof templateMap[TemplateId];
+export const getTemplateById = (id: string) => {
+    return templateMap[id] || null;
+}

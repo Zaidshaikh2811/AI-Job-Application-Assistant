@@ -10,8 +10,11 @@ import { Upload, FileText, Link, Briefcase } from "lucide-react"
 import { getUserFullData } from "@/actions/user"
 import { toast } from "sonner"
 import { ResumeData } from "./ResumeData"
+import { saveResume } from "@/actions/resume"
+import { useSearchParams } from "next/navigation"
 
 export default function SimplifiedJobForm() {
+
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [jobTitle, setJobTitle] = useState("")
     const [jobDescription, setJobDescription] = useState("")
@@ -19,6 +22,7 @@ export default function SimplifiedJobForm() {
     const [resumeFile, setResumeFile] = useState<File | null>(null)
     const [showResume, setShowResume] = useState(false)
     const [generatedResumeData, setGeneratedResumeData] = useState(null)
+    const searchParams = useSearchParams()
 
 
 
@@ -95,7 +99,7 @@ export default function SimplifiedJobForm() {
             if (!userData) {
                 throw new Error("Failed to fetch user data")
             }
-            console.log("userData:", userData.data);
+
 
 
             // Simulate API call
@@ -111,17 +115,26 @@ export default function SimplifiedJobForm() {
                 throw new Error("Network response was not ok")
             }
             const responseData = await response.json()
-            console.log("Response Data:", responseData);
+
+
+            const resp = await saveResume(responseData.resumeData);
+            console.log("Response from saveResume:", resp);
+
+            if (!resp.success) {
+                toast.error(resp.message || "Failed to save resume")
+                return
+            }
 
 
             toast.success("Application submitted successfully!")
-            setGeneratedResumeData(responseData)
-            setShowResume(true)
+            // setGeneratedResumeData(responseData)
+            // setShowResume(true)
             // Reset form
             setJobTitle("")
             setJobDescription("")
             setJobLink("")
             setResumeFile(null)
+            window.location.href = `/resume/${resp.data._id}?template=${searchParams.get("template")}` // Redirect to the generated resume page;
 
         } catch (error) {
             console.error("Submission error:", error)

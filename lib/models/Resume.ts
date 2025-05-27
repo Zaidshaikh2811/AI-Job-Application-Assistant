@@ -1,75 +1,68 @@
-// models/Resume.ts
-import { Schema, model, models, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-interface ContactInformation {
-    name: string;
-    email: string;
-    phone: string;
-    linkedin?: string;
-}
-
-interface WorkExperience {
-    jobTitle: string;
-    company: string;
-    startDate: string;
-    endDate: string;
-    description: string;
-}
-
-export interface ResumeDocument extends Document {
-    summary?: string;
-    workExperience?: WorkExperience[];
-    skills?: string[];
-    education?: string;
-    certifications?: string;
-    projects?: string;
-    contactInformation: ContactInformation;
-}
-
-const ResumeSchema = new Schema<ResumeDocument>({
-    summary: { type: String, default: null },
-
-    workExperience: {
-        type: [
-            {
-                jobTitle: { type: String, required: true },
-                company: { type: String, required: true },
-                startDate: { type: String, required: true },
-                endDate: { type: String, required: true },
-                description: { type: String, required: true },
-            },
-        ],
-        default: [],
-    },
-
-    skills: {
-        type: [String],
-        default: [],
-    },
-
-    education: {
-        type: String,
-        default: null,
-    },
-
-    certifications: {
-        type: String,
-        default: null,
-    },
-
-    projects: {
-        type: String,
-        default: null,
-    },
-
-    contactInformation: {
-        name: { type: String, required: true },
-        email: { type: String, required: true },
-        phone: { type: String, required: true },
-        linkedin: { type: String, default: null },
-    },
+const WorkExperienceSchema = new mongoose.Schema({
+    jobTitle: String,
+    company: String,
+    startDate: String,
+    endDate: String,
+    description: String,
+    achievements: [String],
+    technologies: [String]
 });
 
-const Resume = models.Resume || model<ResumeDocument>('Resume', ResumeSchema);
+const SkillSchema = new mongoose.Schema({
+    technical: [String],
+    soft: [String]
+}, { _id: false });
 
-export default Resume;
+const EducationSchema = new mongoose.Schema({
+    degree: String,
+    institution: String,
+    graduationDate: String,
+    gpa: String,
+    relevantCoursework: [String]
+});
+
+const CertificationSchema = new mongoose.Schema({
+    name: String,
+    issuer: String,
+    date: String,
+    expiryDate: String,
+    credentialId: String
+});
+
+const ProjectSchema = new mongoose.Schema({
+    name: String,
+    description: String,
+    technologies: [String],
+    link: String,
+    achievements: [String]
+});
+
+const ContactInformationSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    phone: String,
+    linkedin: String
+}, { _id: false });
+
+const LanguageSchema = new mongoose.Schema({
+    name: String,
+    proficiency: String
+});
+
+const ResumeSchema = new mongoose.Schema({
+    summary: String,
+    workExperience: [WorkExperienceSchema],
+    skills: SkillSchema,
+    education: [EducationSchema],
+    certifications: [CertificationSchema],
+    projects: [ProjectSchema],
+    contactInformation: ContactInformationSchema,
+    languages: [LanguageSchema],
+    achievements: [String] // Changed to array of strings based on your latest JSON
+}, {
+    timestamps: true
+});
+
+export default mongoose.models.Resume || mongoose.model('Resume', ResumeSchema);
