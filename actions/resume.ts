@@ -27,11 +27,11 @@ export const getIndividualResume = async (id: string) => {
 };
 
 
-export const saveResume = async (resumeData: any) => {
+export const saveResume = async (resumeData: any, id: string) => {
     try {
         await dbConnect();
 
-        const resp = await Resume.create(JSON.parse(JSON.stringify(resumeData)));
+        const resp = await Resume.create(JSON.parse(JSON.stringify({ ...resumeData, userId: id })));
 
 
         return { success: true, message: "Resume saved successfully", data: JSON.parse(JSON.stringify(resp)) };

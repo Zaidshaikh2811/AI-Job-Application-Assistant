@@ -52,6 +52,7 @@ const LanguageSchema = new mongoose.Schema({
 });
 
 const ResumeSchema = new mongoose.Schema({
+    userId: String,
     summary: String,
     workExperience: [WorkExperienceSchema],
     skills: SkillSchema,

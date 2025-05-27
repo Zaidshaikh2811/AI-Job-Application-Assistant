@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Upload, FileText, Link, Briefcase } from "lucide-react"
 import { getUserFullData } from "@/actions/user"
 import { toast } from "sonner"
-import { ResumeData } from "./ResumeData"
+
 import { saveResume } from "@/actions/resume"
 import { useSearchParams } from "next/navigation"
 
@@ -20,8 +20,6 @@ export default function SimplifiedJobForm() {
     const [jobDescription, setJobDescription] = useState("")
     const [jobLink, setJobLink] = useState("")
     const [resumeFile, setResumeFile] = useState<File | null>(null)
-    const [showResume, setShowResume] = useState(false)
-    const [generatedResumeData, setGeneratedResumeData] = useState(null)
     const searchParams = useSearchParams()
 
 
@@ -117,8 +115,10 @@ export default function SimplifiedJobForm() {
             const responseData = await response.json()
 
 
-            const resp = await saveResume(responseData.resumeData);
-            console.log("Response from saveResume:", resp);
+            // Assert the type of userData.data to access _id
+            const user = userData.data as { _id: string };
+            const resp = await saveResume(responseData.resumeData, user._id);
+
 
             if (!resp.success) {
                 toast.error(resp.message || "Failed to save resume")
@@ -127,9 +127,7 @@ export default function SimplifiedJobForm() {
 
 
             toast.success("Application submitted successfully!")
-            // setGeneratedResumeData(responseData)
-            // setShowResume(true)
-            // Reset form
+
             setJobTitle("")
             setJobDescription("")
             setJobLink("")
@@ -145,16 +143,8 @@ export default function SimplifiedJobForm() {
     }
 
 
-    // Add this function to handle going back to the form
-    const handleBackToForm = () => {
-        setShowResume(false);
-        setGeneratedResumeData(null);
-    };
-    console.log(showResume + "" + generatedResumeData);
 
-    if (showResume && generatedResumeData) {
-        return (<ResumeData data={generatedResumeData} onBack={handleBackToForm} />)
-    }
+
 
     return (
         <div className="min-h-screen      py-8 px-4">

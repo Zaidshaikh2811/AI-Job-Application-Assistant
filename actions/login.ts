@@ -97,8 +97,8 @@ export async function loginUser(email: string, password: string): Promise<LoginR
 
         // Create JWT token (replace `your_jwt_secret` with your env var)
         const token = jwt.sign(
-            // { userId: user._id, email: user.email },
-            { userId: "64eaf6bfa3e2b90c2b9b12a1", email: "janedoe@example.com" },
+            { userId: user._id, email: user.email },
+            // { userId: "64eaf6bfa3e2b90c2b9b12a1", email: "janedoe@example.com" },
             process.env.JWT_SECRET || "your_jwt_secret",
             { expiresIn: "7d" }
         );
