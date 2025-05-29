@@ -1,22 +1,32 @@
+"use client"
+
 import { Award, Briefcase, Code, ExternalLink, Globe, GraduationCap, Linkedin, Mail, Phone } from "lucide-react";
 import { ResumeTemplateProps } from "./util";
 
-export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
+import { useRef } from "react";
+
+
+export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resumeData, }) => {
     const formatDate = (dateString: string) => {
         if (!dateString) return '';
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
     };
-
+    const resumeRef = useRef<HTMLDivElement>(null);
     const formatDateRange = (startDate: string, endDate: string) => {
         const start = formatDate(startDate);
         const end = endDate ? formatDate(endDate) : 'Present';
         return `${start} - ${end}`;
     };
 
+
+
+
+
     return (
         <div className="max-w-6xl mx-auto bg-white shadow-xl overflow-hidden">
-            <div className="flex flex-col lg:flex-row min-h-screen">
+
+            <div ref={resumeRef} className="flex flex-col lg:flex-row min-h-screen">
                 {/* Left Sidebar */}
                 <div className="lg:w-1/3 bg-gradient-to-b from-emerald-600 to-teal-700 text-white p-8">
                     <div className="mb-8">
@@ -241,3 +251,4 @@ export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resum
         </div>
     );
 };
+

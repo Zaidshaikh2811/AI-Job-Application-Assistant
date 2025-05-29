@@ -50,7 +50,6 @@ export const saveResume = async (
     try {
         await dbConnect();
 
-        console.log("Saving resume with ATS Score:", atsScore, "Metadata:", metadata);
 
         // Validate required fields
         if (!resumeData || !id || !template) {

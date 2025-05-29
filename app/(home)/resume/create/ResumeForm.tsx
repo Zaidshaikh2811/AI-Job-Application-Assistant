@@ -134,7 +134,7 @@ export default function SimplifiedJobForm() {
             setJobDescription("")
             setJobLink("")
             setResumeFile(null)
-            // window.location.href = `/resume/${resp.data._id}?template=${searchParams.get("template")}` // Redirect to the generated resume page;
+            window.location.href = `/resume/${resp.data._id}?template=${searchParams.get("template")}` // Redirect to the generated resume page;
 
         } catch (error) {
             console.error("Submission error:", error)

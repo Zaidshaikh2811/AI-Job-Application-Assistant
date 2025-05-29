@@ -65,4 +65,7 @@ export interface ResumeData {
 
 export interface ResumeTemplateProps {
     resumeData: ResumeData;
+    showDownloadButton?: boolean;
+    downloadButtonVariant?: 'primary' | 'secondary' | 'outline';
+    downloadButtonPosition?: 'fixed' | 'static';
 }

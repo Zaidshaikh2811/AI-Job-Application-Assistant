@@ -3,14 +3,9 @@
 import React from 'react'
 import { Mail, Phone, Linkedin, Calendar, ExternalLink, Award, Code, User, GraduationCap } from 'lucide-react';
 import { ResumeTemplateProps } from './util';
-const ResumeFirst: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
+import { formatDate } from '@/lib/resume.utils';
+const ResumeFirst: React.FC<ResumeTemplateProps> = ({ resumeData, }) => {
 
-
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
 
     const formatDateRange = (startDate: string, endDate: string) => {
         const start = formatDate(startDate);
@@ -18,8 +13,12 @@ const ResumeFirst: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
         return `${start} - ${end}`;
     };
 
+
+
     return (
         <div className="max-w-4xl mx-auto bg-white shadow-lg print:shadow-none">
+
+
             {/* Header Section */}
             <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-8">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center">

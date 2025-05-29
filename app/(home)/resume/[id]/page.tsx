@@ -7,17 +7,19 @@ import { getTemplateById } from '@/components/templates';
 
 const Page = async ({ params, searchParams }: { params: Promise<{ id: string }>, searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) => {
     const { id } = await params;
-    const template = (await searchParams).template as string | undefined;
+    const resolvedSearchParams = await searchParams;
 
 
 
+    const templateKey = resolvedSearchParams.template as string | undefined;
     const getData = await getIndividualResume(id);
-    const Template = getTemplateById(template ?? '')?.component || ResumeFirst;
+    const Template = getTemplateById(templateKey ?? '')?.component || ResumeFirst;
+
+
 
 
     return (
         <Template resumeData={getData.data} />
-
     );
 };
 

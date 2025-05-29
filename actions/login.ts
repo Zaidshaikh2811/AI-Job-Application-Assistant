@@ -69,7 +69,6 @@ export async function validateOtp(email: string, otp: string): Promise<OtpValida
 
 // Dummy email sender stub (replace with real email service)
 async function sendOtpEmail(email: string, otp: string) {
-    console.log(`Sending OTP ${otp} to email: ${email}`);
     try {
 
         await sendOtpEmailFunc(email, otp);
@@ -151,7 +150,6 @@ export async function signupWithOtp(
             await existingUser.save();
 
             await sendOtpEmail(email, otp);
-            console.log("OTP re-sent to email:", email);
             return { success: true, data: { email } };
         }
 
@@ -168,7 +166,6 @@ export async function signupWithOtp(
         await newUser.save();
 
         await sendOtpEmail(email, otp);
-        console.log("OTP sent to email:", email);
         return { success: true, data: { email } };
 
     } catch (error) {
