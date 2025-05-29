@@ -113,11 +113,13 @@ export default function SimplifiedJobForm() {
                 throw new Error("Network response was not ok")
             }
             const responseData = await response.json()
+            console.log("Response data:", responseData);
 
 
             // Assert the type of userData.data to access _id
             const user = userData.data as { _id: string };
-            const resp = await saveResume(responseData.resumeData, user._id);
+            const template = searchParams.get("template") ?? "";
+            const resp = await saveResume(responseData.resumeData, user._id, template, responseData.atsScore, responseData.metadata);
 
 
             if (!resp.success) {
@@ -132,7 +134,7 @@ export default function SimplifiedJobForm() {
             setJobDescription("")
             setJobLink("")
             setResumeFile(null)
-            window.location.href = `/resume/${resp.data._id}?template=${searchParams.get("template")}` // Redirect to the generated resume page;
+            // window.location.href = `/resume/${resp.data._id}?template=${searchParams.get("template")}` // Redirect to the generated resume page;
 
         } catch (error) {
             console.error("Submission error:", error)
