@@ -1,5 +1,193 @@
-import { Briefcase, Code, GraduationCap, Linkedin, Mail, Phone, Star } from "lucide-react";
 import { ResumeTemplateProps } from "./util";
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+
+
+const modernDarkStyles = StyleSheet.create({
+    page: {
+        flexDirection: 'column',
+        backgroundColor: '#1f2937',
+        color: '#ffffff',
+    },
+    header: {
+        background: 'linear-gradient(90deg, #9333ea 0%, #ec4899 50%, #ef4444 100%)',
+        backgroundColor: '#9333ea',
+        padding: 32,
+    },
+    name: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        marginBottom: 16,
+    },
+    summary: {
+        fontSize: 14,
+        color: '#f3f4f6',
+        marginBottom: 24,
+        lineHeight: 1.5,
+    },
+    contactContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 16,
+    },
+    contactItem: {
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 16,
+        fontSize: 10,
+    },
+    content: {
+        padding: 32,
+    },
+    section: {
+        marginBottom: 32,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#a855f7',
+        marginBottom: 20,
+        borderBottomWidth: 2,
+        borderBottomColor: '#a855f7',
+        paddingBottom: 8,
+    },
+    jobContainer: {
+        backgroundColor: '#374151',
+        borderRadius: 8,
+        padding: 20,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#4b5563',
+    },
+    jobHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 12,
+    },
+    jobTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#ffffff',
+    },
+    company: {
+        fontSize: 14,
+        color: '#a855f7',
+        fontWeight: 'semibold',
+    },
+    dateRange: {
+        fontSize: 10,
+        color: '#9ca3af',
+        backgroundColor: '#4b5563',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+    },
+    description: {
+        fontSize: 12,
+        color: '#d1d5db',
+        marginBottom: 12,
+        lineHeight: 1.4,
+    },
+    achievement: {
+        fontSize: 11,
+        color: '#d1d5db',
+        marginBottom: 6,
+        lineHeight: 1.3,
+    },
+    techContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 6,
+        marginTop: 8,
+    },
+    techTag: {
+        backgroundColor: '#9333ea',
+        color: '#ffffff',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 12,
+        fontSize: 9,
+    },
+    skillsGrid: {
+        flexDirection: 'row',
+        gap: 32,
+    },
+    skillColumn: {
+        flex: 1,
+        backgroundColor: '#374151',
+        borderRadius: 8,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#4b5563',
+    },
+    skillTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 12,
+    },
+    skillTechnical: {
+        color: '#60a5fa',
+    },
+    skillSoft: {
+        color: '#34d399',
+    },
+    skillTagContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 6,
+    },
+    skillTagTechnical: {
+        backgroundColor: '#2563eb',
+        color: '#ffffff',
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        borderRadius: 6,
+        fontSize: 10,
+    },
+    skillTagSoft: {
+        backgroundColor: '#059669',
+        color: '#ffffff',
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        borderRadius: 6,
+        fontSize: 10,
+    },
+    educationItem: {
+        backgroundColor: '#374151',
+        borderRadius: 8,
+        padding: 20,
+        borderWidth: 1,
+        borderColor: '#4b5563',
+        marginBottom: 12,
+    },
+    educationHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+    },
+    degree: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#ffffff',
+    },
+    institution: {
+        fontSize: 12,
+        color: '#a855f7',
+    },
+    educationDetails: {
+        alignItems: 'flex-end',
+    },
+    graduationDate: {
+        fontSize: 10,
+        color: '#9ca3af',
+    },
+    gpa: {
+        fontSize: 10,
+        color: '#9ca3af',
+    },
+});
 
 export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
     const formatDate = (dateString: string) => {
@@ -15,143 +203,143 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
     };
 
     return (
-        <div className="max-w-4xl mx-auto bg-gray-900 text-white shadow-2xl">
-            <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 p-8">
-                <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-200">
-                    {resumeData.contactInformation.name}
-                </h1>
-                {resumeData.summary && (
-                    <p className="text-gray-100 text-xl leading-relaxed mb-6">{resumeData.summary}</p>
-                )}
-                <div className="flex flex-wrap gap-6 text-sm">
-                    {resumeData.contactInformation.email && (
-                        <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
-                            <Mail size={16} />
-                            <span>{resumeData.contactInformation.email}</span>
-                        </div>
+        <Document>
+            <Page size="A4" style={modernDarkStyles.page}>
+                {/* Header */}
+                <View style={modernDarkStyles.header}>
+                    <Text style={modernDarkStyles.name}>
+                        {resumeData.contactInformation.name}
+                    </Text>
+                    {resumeData.summary && (
+                        <Text style={modernDarkStyles.summary}>{resumeData.summary}</Text>
                     )}
-                    {resumeData.contactInformation.phone && (
-                        <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
-                            <Phone size={16} />
-                            <span>{resumeData.contactInformation.phone}</span>
-                        </div>
+                    <View style={modernDarkStyles.contactContainer}>
+                        {resumeData.contactInformation.email && (
+                            <Text style={modernDarkStyles.contactItem}>
+                                📧 {resumeData.contactInformation.email}
+                            </Text>
+                        )}
+                        {resumeData.contactInformation.phone && (
+                            <Text style={modernDarkStyles.contactItem}>
+                                📞 {resumeData.contactInformation.phone}
+                            </Text>
+                        )}
+                        {resumeData.contactInformation.linkedin && (
+                            <Text style={modernDarkStyles.contactItem}>
+                                💼 LinkedIn
+                            </Text>
+                        )}
+                    </View>
+                </View>
+
+                {/* Content */}
+                <View style={modernDarkStyles.content}>
+                    {/* Experience */}
+                    {resumeData.workExperience.length > 0 && (
+                        <View style={modernDarkStyles.section}>
+                            <Text style={modernDarkStyles.sectionTitle}>💼 EXPERIENCE</Text>
+                            {resumeData.workExperience.map((job, index) => (
+                                <View key={index} style={modernDarkStyles.jobContainer}>
+                                    <View style={modernDarkStyles.jobHeader}>
+                                        <View>
+                                            <Text style={modernDarkStyles.jobTitle}>{job.jobTitle}</Text>
+                                            <Text style={modernDarkStyles.company}>{job.company}</Text>
+                                        </View>
+                                        <Text style={modernDarkStyles.dateRange}>
+                                            {formatDateRange(job.startDate ?? '', job.endDate ?? '')}
+                                        </Text>
+                                    </View>
+                                    {job.description && (
+                                        <Text style={modernDarkStyles.description}>{job.description}</Text>
+                                    )}
+                                    {job.achievements && job.achievements.length > 0 && (
+                                        <View>
+                                            {job.achievements.map((achievement, idx) => (
+                                                <Text key={idx} style={modernDarkStyles.achievement}>
+                                                    ⭐ {achievement}
+                                                </Text>
+                                            ))}
+                                        </View>
+                                    )}
+                                    {job.technologies && job.technologies.length > 0 && (
+                                        <View style={modernDarkStyles.techContainer}>
+                                            {job.technologies.map((tech, idx) => (
+                                                <Text key={idx} style={modernDarkStyles.techTag}>
+                                                    {tech}
+                                                </Text>
+                                            ))}
+                                        </View>
+                                    )}
+                                </View>
+                            ))}
+                        </View>
                     )}
-                    {resumeData.contactInformation.linkedin && (
-                        <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
-                            <Linkedin size={16} />
-                            <span>LinkedIn</span>
-                        </div>
+
+                    {/* Skills */}
+                    {(resumeData.skills.technical.length > 0 || resumeData.skills.soft.length > 0) && (
+                        <View style={modernDarkStyles.section}>
+                            <Text style={modernDarkStyles.sectionTitle}>💻 SKILLS</Text>
+                            <View style={modernDarkStyles.skillsGrid}>
+                                {resumeData.skills.technical.length > 0 && (
+                                    <View style={modernDarkStyles.skillColumn}>
+                                        <Text style={[modernDarkStyles.skillTitle, modernDarkStyles.skillTechnical]}>
+                                            Technical
+                                        </Text>
+                                        <View style={modernDarkStyles.skillTagContainer}>
+                                            {resumeData.skills.technical.map((skill, index) => (
+                                                <Text key={index} style={modernDarkStyles.skillTagTechnical}>
+                                                    {skill}
+                                                </Text>
+                                            ))}
+                                        </View>
+                                    </View>
+                                )}
+                                {resumeData.skills.soft.length > 0 && (
+                                    <View style={modernDarkStyles.skillColumn}>
+                                        <Text style={[modernDarkStyles.skillTitle, modernDarkStyles.skillSoft]}>
+                                            Soft Skills
+                                        </Text>
+                                        <View style={modernDarkStyles.skillTagContainer}>
+                                            {resumeData.skills.soft.map((skill, index) => (
+                                                <Text key={index} style={modernDarkStyles.skillTagSoft}>
+                                                    {skill}
+                                                </Text>
+                                            ))}
+                                        </View>
+                                    </View>
+                                )}
+                            </View>
+                        </View>
                     )}
-                </div>
-            </div>
 
-            <div className="p-8 space-y-8">
-                {resumeData.workExperience.length > 0 && (
-                    <section>
-                        <h2 className="text-3xl font-bold text-purple-400 mb-6 flex items-center">
-                            <Briefcase className="mr-3" size={28} />
-                            Experience
-                        </h2>
-                        {resumeData.workExperience.map((job, index) => (
-                            <div key={index} className="mb-8 bg-gray-800 rounded-xl p-6 border border-gray-700">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-white">{job.jobTitle}</h3>
-                                        <p className="text-purple-400 text-lg font-semibold">{job.company}</p>
-                                    </div>
-                                    <span className="text-gray-400 text-sm bg-gray-700 px-3 py-1 rounded-full">
-                                        {formatDateRange(job.startDate ?? '', job.endDate ?? '')}
-                                    </span>
-                                </div>
-                                {job.description && (
-                                    <p className="text-gray-300 mb-4 leading-relaxed">{job.description}</p>
-                                )}
-                                {job.achievements && job.achievements.length > 0 && (
-                                    <ul className="space-y-2 mb-4">
-                                        {job.achievements.map((achievement, idx) => (
-                                            <li key={idx} className="flex items-start">
-                                                <Star className="text-yellow-400 mr-2 mt-1 flex-shrink-0" size={16} />
-                                                <span className="text-gray-300">{achievement}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                                {job.technologies && job.technologies.length > 0 && (
-                                    <div className="flex flex-wrap gap-2">
-                                        {job.technologies.map((tech, idx) => (
-                                            <span key={idx} className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </section>
-                )}
-
-                {(resumeData.skills.technical.length > 0 || resumeData.skills.soft.length > 0) && (
-                    <section>
-                        <h2 className="text-3xl font-bold text-purple-400 mb-6 flex items-center">
-                            <Code className="mr-3" size={28} />
-                            Skills
-                        </h2>
-                        <div className="grid md:grid-cols-2 gap-8">
-                            {resumeData.skills.technical.length > 0 && (
-                                <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                                    <h3 className="text-xl font-bold text-blue-400 mb-4">Technical</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {resumeData.skills.technical.map((skill, index) => (
-                                            <span key={index} className="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium">
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                            {resumeData.skills.soft.length > 0 && (
-                                <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                                    <h3 className="text-xl font-bold text-green-400 mb-4">Soft Skills</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {resumeData.skills.soft.map((skill, index) => (
-                                            <span key={index} className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium">
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </section>
-                )}
-
-                {resumeData.education.length > 0 && (
-                    <section>
-                        <h2 className="text-3xl font-bold text-purple-400 mb-6 flex items-center">
-                            <GraduationCap className="mr-3" size={28} />
-                            Education
-                        </h2>
-                        {resumeData.education.map((edu, index) => (
-                            <div key={index} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h3 className="text-xl font-bold text-white">{edu.degree}</h3>
-                                        <p className="text-purple-400 text-lg">{edu.institution}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        {edu.graduationDate && (
-                                            <span className="text-gray-400 text-sm">{formatDate(edu.graduationDate)}</span>
-                                        )}
-                                        {edu.gpa && (
-                                            <p className="text-gray-400 text-sm">GPA: {edu.gpa}</p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </section>
-                )}
-            </div>
-        </div>
+                    {/* Education */}
+                    {resumeData.education.length > 0 && (
+                        <View style={modernDarkStyles.section}>
+                            <Text style={modernDarkStyles.sectionTitle}>🎓 EDUCATION</Text>
+                            {resumeData.education.map((edu, index) => (
+                                <View key={index} style={modernDarkStyles.educationItem}>
+                                    <View style={modernDarkStyles.educationHeader}>
+                                        <View>
+                                            <Text style={modernDarkStyles.degree}>{edu.degree}</Text>
+                                            <Text style={modernDarkStyles.institution}>{edu.institution}</Text>
+                                        </View>
+                                        <View style={modernDarkStyles.educationDetails}>
+                                            {edu.graduationDate && (
+                                                <Text style={modernDarkStyles.graduationDate}>
+                                                    {formatDate(edu.graduationDate)}
+                                                </Text>
+                                            )}
+                                            {edu.gpa && (
+                                                <Text style={modernDarkStyles.gpa}>GPA: {edu.gpa}</Text>
+                                            )}
+                                        </View>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                </View>
+            </Page>
+        </Document>
     );
 };

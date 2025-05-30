@@ -1,254 +1,223 @@
 "use client"
 
-import { Award, Briefcase, Code, ExternalLink, Globe, GraduationCap, Linkedin, Mail, Phone } from "lucide-react";
 import { ResumeTemplateProps } from "./util";
 
-import { useRef } from "react";
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { styles } from "@/lib/style";
 
 
-export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resumeData, }) => {
+const twoColumnStyles = StyleSheet.create({
+    page: {
+        flexDirection: 'row',
+        backgroundColor: '#ffffff',
+    },
+    sidebar: {
+        width: '35%',
+        backgroundColor: '#059669',
+        padding: 25,
+        color: 'white',
+    },
+    mainContent: {
+        width: '65%',
+        padding: 25,
+    },
+    sidebarName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    sidebarSection: {
+        marginBottom: 20,
+    },
+    sidebarTitle: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    sidebarItem: {
+        fontSize: 10,
+        marginBottom: 6,
+        backgroundColor: 'rgba(255,255,255,0.1)',
+        padding: 6,
+        borderRadius: 3,
+    },
+    mainSection: {
+        marginBottom: 20,
+    },
+    mainTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#1f2937',
+        marginBottom: 12,
+        borderBottomWidth: 2,
+        borderBottomColor: '#059669',
+        paddingBottom: 4,
+    },
+    projectContainer: {
+        backgroundColor: '#f9fafb',
+        padding: 12,
+        marginBottom: 12,
+        borderRadius: 4,
+    },
+    projectTitle: {
+        fontSize: 12,
+        fontWeight: 'bold',
+        marginBottom: 6,
+    },
+});
+
+export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
     const formatDate = (dateString: string) => {
         if (!dateString) return '';
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
     };
-    const resumeRef = useRef<HTMLDivElement>(null);
+
     const formatDateRange = (startDate: string, endDate: string) => {
         const start = formatDate(startDate);
         const end = endDate ? formatDate(endDate) : 'Present';
         return `${start} - ${end}`;
     };
 
-
-
-
-
     return (
-        <div className="max-w-6xl mx-auto bg-white shadow-xl overflow-hidden">
+        <Document>
+            <Page size="A4" style={twoColumnStyles.page}>
+                <View style={twoColumnStyles.sidebar}>
+                    <Text style={twoColumnStyles.sidebarName}>{resumeData.contactInformation.name}</Text>
 
-            <div ref={resumeRef} className="flex flex-col lg:flex-row min-h-screen">
-                {/* Left Sidebar */}
-                <div className="lg:w-1/3 bg-gradient-to-b from-emerald-600 to-teal-700 text-white p-8">
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold mb-4">{resumeData.contactInformation.name}</h1>
-                        <div className="space-y-3">
-                            {resumeData.contactInformation.email && (
-                                <div className="flex items-center space-x-3">
-                                    <Mail size={18} />
-                                    <span className="text-sm">{resumeData.contactInformation.email}</span>
-                                </div>
-                            )}
-                            {resumeData.contactInformation.phone && (
-                                <div className="flex items-center space-x-3">
-                                    <Phone size={18} />
-                                    <span className="text-sm">{resumeData.contactInformation.phone}</span>
-                                </div>
-                            )}
-                            {resumeData.contactInformation.linkedin && (
-                                <div className="flex items-center space-x-3">
-                                    <Linkedin size={18} />
-                                    <span className="text-sm">LinkedIn</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                    <View style={twoColumnStyles.sidebarSection}>
+                        <Text style={twoColumnStyles.sidebarTitle}>Contact</Text>
+                        {resumeData.contactInformation.email && (
+                            <Text style={twoColumnStyles.sidebarItem}>{resumeData.contactInformation.email}</Text>
+                        )}
+                        {resumeData.contactInformation.phone && (
+                            <Text style={twoColumnStyles.sidebarItem}>{resumeData.contactInformation.phone}</Text>
+                        )}
+                        {resumeData.contactInformation.linkedin && (
+                            <Text style={twoColumnStyles.sidebarItem}>LinkedIn</Text>
+                        )}
+                    </View>
 
-                    {(resumeData.skills.technical.length > 0 || resumeData.skills.soft.length > 0) && (
-                        <div className="mb-8">
-                            <h2 className="text-xl font-bold mb-4 flex items-center">
-                                <Code size={20} className="mr-2" />
-                                Skills
-                            </h2>
-                            {resumeData.skills.technical.length > 0 && (
-                                <div className="mb-6">
-                                    <h3 className="font-semibold mb-3 text-emerald-200">Technical</h3>
-                                    <div className="space-y-2">
-                                        {resumeData.skills.technical.map((skill, index) => (
-                                            <div key={index} className="bg-white/10 backdrop-blur-sm rounded px-3 py-1 text-sm">
-                                                {skill}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                            {resumeData.skills.soft.length > 0 && (
-                                <div>
-                                    <h3 className="font-semibold mb-3 text-emerald-200">Soft Skills</h3>
-                                    <div className="space-y-2">
-                                        {resumeData.skills.soft.map((skill, index) => (
-                                            <div key={index} className="bg-white/10 backdrop-blur-sm rounded px-3 py-1 text-sm">
-                                                {skill}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                    {resumeData.skills.technical.length > 0 && (
+                        <View style={twoColumnStyles.sidebarSection}>
+                            <Text style={twoColumnStyles.sidebarTitle}>Technical Skills</Text>
+                            {resumeData.skills.technical.map((skill, index) => (
+                                <Text key={index} style={twoColumnStyles.sidebarItem}>{skill}</Text>
+                            ))}
+                        </View>
+                    )}
+
+                    {resumeData.skills.soft.length > 0 && (
+                        <View style={twoColumnStyles.sidebarSection}>
+                            <Text style={twoColumnStyles.sidebarTitle}>Soft Skills</Text>
+                            {resumeData.skills.soft.map((skill, index) => (
+                                <Text key={index} style={twoColumnStyles.sidebarItem}>{skill}</Text>
+                            ))}
+                        </View>
                     )}
 
                     {resumeData.languages.length > 0 && (
-                        <div className="mb-8">
-                            <h2 className="text-xl font-bold mb-4 flex items-center">
-                                <Globe size={20} className="mr-2" />
-                                Languages
-                            </h2>
-                            <div className="space-y-2">
-                                {resumeData.languages.map((language, index) => (
-                                    <div key={index} className="flex justify-between">
-                                        <span className="text-sm">
-                                            {typeof language === 'string' ? language : language.name}
-                                        </span>
-                                        {typeof language === 'object' && language.proficiency && (
-                                            <span className="text-sm text-emerald-200">{language.proficiency}</span>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        <View style={twoColumnStyles.sidebarSection}>
+                            <Text style={twoColumnStyles.sidebarTitle}>Languages</Text>
+                            {resumeData.languages.map((language, index) => (
+                                <Text key={index} style={twoColumnStyles.sidebarItem}>
+                                    {typeof language === 'string' ? language : `${language.name} - ${language.proficiency}`}
+                                </Text>
+                            ))}
+                        </View>
                     )}
+                </View>
 
-                    {resumeData.certifications && resumeData.certifications.length > 0 && (
-                        <div>
-                            <h2 className="text-xl font-bold mb-4 flex items-center">
-                                <Award size={20} className="mr-2" />
-                                Certifications
-                            </h2>
-                            <div className="space-y-3">
-                                {resumeData.certifications.map((cert, index) => (
-                                    <div key={index} className="bg-white/10 backdrop-blur-sm rounded p-3">
-                                        <h3 className="font-semibold text-sm">{cert.name}</h3>
-                                        <p className="text-emerald-200 text-xs">{cert.issuer}</p>
-                                        {cert.date && <p className="text-xs">{formatDate(cert.date)}</p>}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* Right Content */}
-                <div className="lg:w-2/3 p-8">
+                <View style={twoColumnStyles.mainContent}>
                     {resumeData.summary && (
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-4">Professional Summary</h2>
-                            <p className="text-gray-700 leading-relaxed">{resumeData.summary}</p>
-                        </div>
+                        <View style={twoColumnStyles.mainSection}>
+                            <Text style={twoColumnStyles.mainTitle}>Professional Summary</Text>
+                            <Text style={styles.description}>{resumeData.summary}</Text>
+                        </View>
                     )}
 
                     {resumeData.workExperience.length > 0 && (
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <Briefcase size={24} className="mr-3 text-emerald-600" />
-                                Work Experience
-                            </h2>
+                        <View style={twoColumnStyles.mainSection}>
+                            <Text style={twoColumnStyles.mainTitle}>Work Experience</Text>
                             {resumeData.workExperience.map((job, index) => (
-                                <div key={index} className="mb-8 last:mb-0 border-l-4 border-emerald-500 pl-6">
-                                    <div className="flex justify-between items-start mb-2">
-                                        <div>
-                                            <h3 className="text-xl font-bold text-gray-800">{job.jobTitle}</h3>
-                                            <p className="text-emerald-600 font-semibold">{job.company}</p>
-                                        </div>
-                                        <span className="text-gray-500 text-sm bg-gray-100 px-3 py-1 rounded-full">
+                                <View key={index} style={styles.jobContainer}>
+                                    <View style={styles.jobHeader}>
+                                        <View>
+                                            <Text style={styles.jobTitle}>{job.jobTitle}</Text>
+                                            <Text style={styles.company}>{job.company}</Text>
+                                        </View>
+                                        <Text style={styles.dateRange}>
                                             {formatDateRange(job.startDate || '', job.endDate || '')}
-                                        </span>
-                                    </div>
+                                        </Text>
+                                    </View>
                                     {job.description && (
-                                        <p className="text-gray-700 mb-3">{job.description}</p>
+                                        <Text style={styles.description}>{job.description}</Text>
                                     )}
                                     {job.achievements && job.achievements.length > 0 && (
-                                        <ul className="space-y-1 mb-4">
+                                        <View style={styles.achievements}>
                                             {job.achievements.map((achievement, idx) => (
-                                                <li key={idx} className="flex items-start">
-                                                    <span className="text-emerald-600 mr-2">▸</span>
-                                                    <span className="text-gray-700">{achievement}</span>
-                                                </li>
+                                                <Text key={idx} style={styles.achievement}>▸ {achievement}</Text>
                                             ))}
-                                        </ul>
+                                        </View>
                                     )}
-                                    {job.technologies && job.technologies.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {job.technologies.map((tech, idx) => (
-                                                <span key={idx} className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-sm">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                </View>
                             ))}
-                        </div>
+                        </View>
                     )}
 
                     {resumeData.projects.length > 0 && (
-                        <div className="mb-8">
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <Code size={24} className="mr-3 text-emerald-600" />
-                                Projects
-                            </h2>
+                        <View style={twoColumnStyles.mainSection}>
+                            <Text style={twoColumnStyles.mainTitle}>Projects</Text>
                             {resumeData.projects.map((project, index) => (
-                                <div key={index} className="mb-6 last:mb-0 bg-gray-50 rounded-lg p-6">
-                                    <div className="flex justify-between items-start mb-2">
-                                        <h3 className="text-lg font-bold text-gray-800">{project.name}</h3>
-                                        {project.link && (
-                                            <ExternalLink size={16} className="text-emerald-600" />
-                                        )}
-                                    </div>
+                                <View key={index} style={twoColumnStyles.projectContainer}>
+                                    <Text style={twoColumnStyles.projectTitle}>{project.name}</Text>
                                     {project.description && (
-                                        <p className="text-gray-700 mb-3">{project.description}</p>
+                                        <Text style={styles.description}>{project.description}</Text>
                                     )}
                                     {project.achievements && project.achievements.length > 0 && (
-                                        <ul className="space-y-1 mb-3">
+                                        <View style={styles.achievements}>
                                             {project.achievements.map((achievement, idx) => (
-                                                <li key={idx} className="flex items-start">
-                                                    <span className="text-emerald-600 mr-2">•</span>
-                                                    <span className="text-gray-700">{achievement}</span>
-                                                </li>
+                                                <Text key={idx} style={styles.achievement}>• {achievement}</Text>
                                             ))}
-                                        </ul>
+                                        </View>
                                     )}
-                                    {project.technologies && project.technologies.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
-                                            {project.technologies.map((tech, idx) => (
-                                                <span key={idx} className="bg-emerald-100 text-emerald-800 px-2 py-1 rounded text-sm">
-                                                    {tech}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                </View>
                             ))}
-                        </div>
+                        </View>
                     )}
 
                     {resumeData.education.length > 0 && (
-                        <div>
-                            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                                <GraduationCap size={24} className="mr-3 text-emerald-600" />
-                                Education
-                            </h2>
+                        <View style={twoColumnStyles.mainSection}>
+                            <Text style={twoColumnStyles.mainTitle}>Education</Text>
                             {resumeData.education.map((edu, index) => (
-                                <div key={index} className="mb-4 last:mb-0">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h3 className="text-lg font-bold text-gray-800">{edu.degree}</h3>
-                                            <p className="text-emerald-600">{edu.institution}</p>
-                                        </div>
-                                        <div className="text-right">
+                                <View key={index} style={styles.jobContainer}>
+                                    <View style={styles.jobHeader}>
+                                        <View>
+                                            <Text style={styles.jobTitle}>{edu.degree}</Text>
+                                            <Text style={styles.company}>{edu.institution}</Text>
+                                        </View>
+                                        <View>
                                             {edu.graduationDate && (
-                                                <span className="text-gray-500 text-sm">{formatDate(edu.graduationDate)}</span>
+                                                <Text style={styles.dateRange}>{formatDate(edu.graduationDate)}</Text>
                                             )}
                                             {edu.gpa && (
-                                                <p className="text-gray-500 text-sm">GPA: {edu.gpa}</p>
+                                                <Text style={styles.dateRange}>GPA: {edu.gpa}</Text>
                                             )}
-                                        </div>
-                                    </div>
-                                </div>
+                                        </View>
+                                    </View>
+                                </View>
                             ))}
-                        </div>
+                        </View>
                     )}
-                </div>
-            </div>
-        </div>
+                </View>
+            </Page>
+        </Document>
     );
 };
+
+
+
+
+
+
 
