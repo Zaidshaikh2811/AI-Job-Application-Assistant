@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import {
     addWorkExperience,
     getWorkExperiences,
@@ -45,14 +45,31 @@ const WorkExperience = () => {
     const [form, setForm] = useState<Experience>(initialForm);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const fetchExperiences = async () => {
-        const res = await getWorkExperiences();
-        if (res.success) {
-            const data = res.data as { workExperience?: Experience[] };
-            setExperiences(data.workExperience || []);
-        } else {
-            toast.error(res.error || 'Failed to load experiences');
+        setIsLoading(true);
+        try {
+
+            const res = await getWorkExperiences();
+
+
+            if (res.success) {
+                const data = res.data as Experience[];
+
+
+                setExperiences(data || []);
+            } else {
+                toast.error(res.error || 'Failed to load experiences');
+            }
+        }
+        catch (error) {
+            console.error('Error fetching experiences:', error);
+            toast.error('An error occurred while loading experiences');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -79,30 +96,48 @@ const WorkExperience = () => {
 
     const handleSubmit = async () => {
         // Convert technologies string to array
-        const formWithTechArray = {
-            ...form,
-            technologies: form.technologies
-                ? form.technologies.split(',').map((tech) => tech.trim()).filter(Boolean)
-                : [],
-        };
-
-        if (editingId) {
-            const res = await updateWorkExperience(editingId, formWithTechArray);
-            if (res.success) {
-                toast.success('Experience updated successfully');
-                resetForm();
-                fetchExperiences();
-            } else {
-                toast.error(res.error || 'Failed to update experience');
+        setIsSubmitting(true);
+        try {
+            let technologiesArray: string[] = [];
+            if (typeof form.technologies === 'string') {
+                technologiesArray = form.technologies.split(',').map((tech) => tech.trim()).filter(Boolean);
+            } else if (Array.isArray(form.technologies)) {
+                technologiesArray = (form.technologies as string[]).filter(Boolean);
             }
-        } else {
-            const res = await addWorkExperience(formWithTechArray);
-            if (res.success) {
-                toast.success('Experience added successfully');
-                resetForm();
-                fetchExperiences();
+
+            const formWithTechArray = {
+                ...form,
+                technologies: technologiesArray,
+            };
+
+            if (editingId) {
+                const res = await updateWorkExperience(editingId, formWithTechArray);
+                if (res.success) {
+                    toast.success('Experience updated successfully');
+                    resetForm();
+                    fetchExperiences();
+                } else {
+                    toast.error(res.error || 'Failed to update experience');
+                }
             } else {
-                toast.error(res.error || 'Failed to add experience');
+                const res = await addWorkExperience(formWithTechArray);
+                if (res.success) {
+                    toast.success('Experience added successfully');
+                    resetForm();
+                    fetchExperiences();
+                } else {
+                    toast.error(res.error || 'Failed to add experience');
+                }
+            }
+        }
+        catch (error) {
+            console.error('Error submitting form:', error);
+            toast.error('An error occurred while submitting the form');
+        } finally {
+            setIsSubmitting(false);
+            // Close modal only on successful submission or if it's an add operation
+            if (!editingId || (editingId && experiences.find(exp => exp._id === editingId))) {
+                setIsModalOpen(false);
             }
         }
     };
@@ -114,7 +149,12 @@ const WorkExperience = () => {
     };
 
     const handleEdit = (experience: Experience) => {
-        setForm(experience);
+        // Ensure technologies is a string for the form input
+        const formExperience = {
+            ...experience,
+            technologies: Array.isArray(experience.technologies) ? experience.technologies.join(', ') : experience.technologies,
+        };
+        setForm(formExperience);
         setEditingId(experience._id || null);
         setIsModalOpen(true);
     };
@@ -127,12 +167,23 @@ const WorkExperience = () => {
 
     const handleDelete = async (id: string | undefined) => {
         if (!id) return;
-        const res = await deleteWorkExperience(id);
-        if (res.success) {
-            toast.success('Experience deleted successfully');
-            fetchExperiences();
-        } else {
-            toast.error(res.error || 'Failed to delete experience');
+        setIsDeleting(id);
+        try {
+
+            const res = await deleteWorkExperience(id);
+            if (res.success) {
+                toast.success('Experience deleted successfully');
+                fetchExperiences();
+            } else {
+                toast.error(res.error || 'Failed to delete experience');
+            }
+        }
+        catch (err) {
+            console.log(err);
+
+            toast.error('An error occurred while deleting');
+        } finally {
+            setIsDeleting(null);
         }
     };
 
@@ -143,6 +194,7 @@ const WorkExperience = () => {
             month: 'short'
         });
     };
+
 
     return (
         <div className="max-w-4xl mx-auto space-y-6 p-6">
@@ -246,11 +298,18 @@ const WorkExperience = () => {
                                 />
                             </div>
                             <div className="flex justify-end space-x-2 pt-4">
-                                <Button variant="outline" onClick={resetForm}>
+                                <Button variant="outline" onClick={resetForm} disabled={isSubmitting}>
                                     Cancel
                                 </Button>
-                                <Button onClick={handleSubmit}>
-                                    {editingId ? 'Update Experience' : 'Add Experience'}
+                                <Button onClick={handleSubmit} disabled={isSubmitting}>
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                            {editingId ? 'Updating...' : 'Adding...'}
+                                        </>
+                                    ) : (
+                                        <>{editingId ? 'Update Experience' : 'Add Experience'}</>
+                                    )}
                                 </Button>
                             </div>
                         </div>
@@ -260,83 +319,98 @@ const WorkExperience = () => {
 
             {/* Experience List */}
             <div className="space-y-4">
-                {experiences.length === 0 ? (
-                    <Card>
-                        <CardContent className="p-8 text-center text-muted-foreground">
-                            <p>No work experiences added yet.</p>
-                            <p className="text-sm mt-1">Click &quot;Add Experience&quot; to get started.</p>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    experiences.map((exp, idx) => (
-                        <Card key={exp._id || idx} className="hover:shadow-md transition-shadow">
-                            <CardContent className="p-6">
-                                <div className="flex justify-between items-start">
-                                    <div className="flex-1">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <div>
-                                                <h3 className="text-xl font-semibold text-foreground">
-                                                    {exp.jobTitle}
-                                                </h3>
-                                                <p className="text-lg text-muted-foreground font-medium">
-                                                    {exp.companyName}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <p className="text-sm text-muted-foreground mb-2">
-                                            📍 {exp.location}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground mb-4">
-                                            📅 {formatDate(exp.startDate)} - {exp.currentlyWorking ? 'Present' : formatDate(exp.endDate || '')}
-                                        </p>
-                                        {exp.responsibilities && (
-                                            <div className="mb-3">
-                                                {exp.technologies && (
+                {
+                    isLoading ? (
+                        <Card>
+                            <CardContent className="p-8 flex justify-center items-center">
+                                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                                <span className="ml-2">Loading experiences...</span>
+                            </CardContent>
+                        </Card>
+                    ) :
+                        experiences.length === 0 ? (
+                            <Card>
+                                <CardContent className="p-8 text-center text-muted-foreground">
+                                    <p>No work experiences added yet.</p>
+                                    <p className="text-sm mt-1">Click &quot;Add Experience&quot; to get started.</p>
+                                </CardContent>
+                            </Card>
+                        ) : (
+                            experiences.map((exp, idx) => (
+                                <Card key={exp._id || idx} className="hover:shadow-md transition-shadow">
+                                    <CardContent className="p-6">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1">
+                                                <div className="flex items-start justify-between mb-2">
                                                     <div>
+                                                        <h3 className="text-xl font-semibold text-foreground">
+                                                            {exp.jobTitle}
+                                                        </h3>
+                                                        <p className="text-lg text-muted-foreground font-medium">
+                                                            {exp.companyName}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-sm text-muted-foreground mb-2">
+                                                    📍 {exp.location}
+                                                </p>
+                                                <p className="text-sm text-muted-foreground mb-4">
+                                                    📅 {formatDate(exp.startDate)} - {exp.currentlyWorking ? 'Present' : formatDate(exp.endDate || '')}
+                                                </p>
+                                                {exp.responsibilities && (
+                                                    <div className="mb-3">
+                                                        {exp.technologies && (
+                                                            <div>
+                                                                <p className="text-sm font-medium text-foreground mb-1">
+                                                                    Technologies:
+                                                                </p>
+                                                                <p className="text-sm text-muted-foreground">
+                                                                    {Array.isArray(exp.technologies)
+                                                                        ? exp.technologies.join(', ')
+                                                                        : exp.technologies}
+                                                                </p>
+                                                            </div>
+                                                        )}
                                                         <p className="text-sm font-medium text-foreground mb-1">
                                                             Technologies:
                                                         </p>
                                                         <p className="text-sm text-muted-foreground">
-                                                            {Array.isArray(exp.technologies)
-                                                                ? exp.technologies.join(', ')
-                                                                : exp.technologies}
+                                                            {exp.technologies}
                                                         </p>
                                                     </div>
                                                 )}
-                                                <p className="text-sm font-medium text-foreground mb-1">
-                                                    Technologies:
-                                                </p>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {exp.technologies}
-                                                </p>
                                             </div>
-                                        )}
-                                    </div>
-                                    <div className="flex gap-2 ml-4">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={() => handleEdit(exp)}
-                                            className="flex items-center gap-1"
-                                        >
-                                            <Edit className="h-3 w-3" />
-                                            Edit
-                                        </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            onClick={() => handleDelete(exp._id)}
-                                            className="flex items-center gap-1"
-                                        >
-                                            <Trash2 className="h-3 w-3" />
-                                            Delete
-                                        </Button>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))
-                )}
+                                            <div className="flex gap-2 ml-4">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => handleEdit(exp)}
+                                                    className="flex items-center gap-1"
+                                                    disabled={isDeleting === exp._id}
+                                                >
+                                                    <Edit className="h-3 w-3" />
+                                                    Edit
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => handleDelete(exp._id)}
+                                                    className="flex items-center gap-1"
+                                                    disabled={isDeleting === exp._id}
+                                                >
+                                                    {isDeleting === exp._id ? (
+                                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="h-3 w-3" />
+                                                    )}
+                                                    {isDeleting === exp._id ? 'Deleting...' : 'Delete'}
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))
+                        )}
             </div>
         </div>
     );
