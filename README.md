@@ -1,39 +1,12 @@
-<<<<<<< HEAD
-# Career Path Recommender
 
-Welcome to the Career Path Recommender! This Next.js application is designed to help users explore career options, build professional resumes, and manage their profiles to achieve their career goals.
-
-## Features
-
-- **User Authentication:** Secure sign-up, login, and session management.
-- **Profile Management:** Users can create and update their professional profiles, including personal details, work experience, education, and skills.
-- **Resume Building:**
-  - Multiple resume templates (Classic, Modern, Creative, etc.).
-  - Dynamic resume generation based on user profile data.
-  - Option to generate resume content using AI (powered by Gemini API).
-- **Career Path Suggestions (Conceptual):** (Future or current - based on `geminiApi.ts` and project name) The system aims to provide personalized career path recommendations.
-- **Interactive UI Components:** Utilizes a rich set of UI components for a modern user experience, including various Magic UI elements.
-- **Dashboard:** A central place for users to access their information and application features.
-- **Responsive Design:** Ensures a seamless experience across different devices.
-
-## Tech Stack
-
-- **Framework:** [Next.js](https://nextjs.org/) (App Router)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/) (likely, given `globals.css` and common Next.js setups) & Shadcn UI (inferred from `components.json` and `ui` components).
-- **Database:** [MongoDB](https://www.mongodb.com/) (inferred from `lib/mongodb.ts` and `lib/models`)
-- **API Integration:** Gemini API (inferred from `actions/geminiApi.ts`) for AI-powered features.
-- **Authentication:** Likely using NextAuth.js or a custom solution within `AuthContext.tsx` and `actions/login.ts`.
-- **UI Components:** Custom components, Shadcn UI, and Magic UI.
-=======
 # AI Job Application Assistant 🤖✨
->>>>>>> 41d10b88b7216391bb692791c03f0084531978f7
+
 
 [![Live Demo](https://ai-job-application-assistant.vercel.app)](https://ai-job-application-assistant.vercel.app)
 [![GitHub Stars](https://img.shields.io/github/stars/Zaidshaikh2811/AI-Job-Application-Assistant)](https://github.com/Zaidshaikh2811/AI-Job-Application-Assistant/stargazers)
  
 
-<<<<<<< HEAD
+
 Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
