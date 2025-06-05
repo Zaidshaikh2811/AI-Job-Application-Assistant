@@ -2,7 +2,7 @@
 # AI Job Application Assistant 🤖✨
 
 
-[![Live Demo](https://ai-job-application-assistant.vercel.app)](https://ai-job-application-assistant.vercel.app)
+[![https://ai-job-application-assistant.vercel.app/](https://ai-job-application-assistant.vercel.app)](https://ai-job-application-assistant.vercel.app)
 [![GitHub Stars](https://img.shields.io/github/stars/Zaidshaikh2811/AI-Job-Application-Assistant)](https://github.com/Zaidshaikh2811/AI-Job-Application-Assistant/stargazers)
  
 
