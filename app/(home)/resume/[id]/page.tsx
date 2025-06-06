@@ -10,15 +10,15 @@ import PDFClientViewer from './PDFClientViewer';
 
 interface PageProps {
     params: Promise<{ id: string }>;
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+
 }
 
-const Page = async ({ params, searchParams }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
     const { id } = await params;
 
 
     const getData = await getIndividualResume(id);
-    console.log('getData:', getData);
+
     const templateKey = getData.data.template as string | undefined;
 
     const Template = getTemplateById(templateKey ?? '')?.component || ResumeFirst;
