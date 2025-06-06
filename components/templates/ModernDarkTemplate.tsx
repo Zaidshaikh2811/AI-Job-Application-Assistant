@@ -190,17 +190,6 @@ const modernDarkStyles = StyleSheet.create({
 });
 
 export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
-
-    const formatDateRange = (startDate: string, endDate: string) => {
-        const start = formatDate(startDate);
-        const end = endDate ? formatDate(endDate) : 'Present';
-        return `${start} - ${end}`;
-    };
 
     return (
         <Document>
@@ -246,7 +235,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                             <Text style={modernDarkStyles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={modernDarkStyles.dateRange}>
-                                            {formatDateRange(job.startDate ?? '', job.endDate ?? '')}
+                                            {job.startDate +''+job.endDate }
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -326,7 +315,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                         <View style={modernDarkStyles.educationDetails}>
                                             {edu.graduationDate && (
                                                 <Text style={modernDarkStyles.graduationDate}>
-                                                    {formatDate(edu.graduationDate)}
+                                                    { edu.graduationDate}
                                                 </Text>
                                             )}
                                             {edu.gpa && (

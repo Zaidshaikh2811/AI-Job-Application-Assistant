@@ -15,10 +15,12 @@ interface PageProps {
 
 const Page = async ({ params, searchParams }: PageProps) => {
     const { id } = await params;
-    const resolvedSearchParams = await searchParams;
 
-    const templateKey = resolvedSearchParams.template as string | undefined;
+
     const getData = await getIndividualResume(id);
+    console.log('getData:', getData);
+    const templateKey = getData.data.template as string | undefined;
+
     const Template = getTemplateById(templateKey ?? '')?.component || ResumeFirst;
 
     return (

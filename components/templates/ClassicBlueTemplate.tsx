@@ -6,17 +6,10 @@ import { styles } from '@/lib/style';
 
 
 export const ClassicBlueTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
 
-    const formatDateRange = (startDate: string, endDate: string) => {
-        const start = formatDate(startDate);
-        const end = endDate ? formatDate(endDate) : 'Present';
-        return `${start} - ${end}`;
-    };
+
+
+    console.log('ClassicBlueTemplate resumeData:', resumeData);
 
     return (
         <Document>
@@ -55,7 +48,8 @@ export const ClassicBlueTemplate: React.FC<ResumeTemplateProps> = ({ resumeData 
                                             <Text style={styles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={styles.dateRange}>
-                                            {formatDateRange(job.startDate, job.endDate ?? '')}
+                                            {job.startDate+" "+ job.endDate}
+
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -120,7 +114,7 @@ export const ClassicBlueTemplate: React.FC<ResumeTemplateProps> = ({ resumeData 
                                         </View>
                                         <View>
                                             {edu.graduationDate && (
-                                                <Text style={styles.dateRange}>{formatDate(edu.graduationDate)}</Text>
+                                                <Text style={styles.dateRange}>{edu.graduationDate}</Text>
                                             )}
                                             {edu.gpa && (
                                                 <Text style={styles.dateRange}>GPA: {edu.gpa}</Text>

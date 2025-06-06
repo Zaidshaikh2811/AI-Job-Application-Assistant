@@ -68,20 +68,7 @@ interface ResumeData {
     achievements: string[];
 }
 
-const formatDate = (dateString: string): string => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short'
-    });
-};
 
-const formatDateRange = (startDate: string, endDate: string | null): string => {
-    const start = formatDate(startDate);
-    const end = endDate ? formatDate(endDate) : 'Present';
-    return `${start} - ${end}`;
-};
 
 // PDF Styles
 const styles = StyleSheet.create({
@@ -379,7 +366,7 @@ const ResumeFirst: React.FC<{ resumeData: ResumeData }> = ({ resumeData }) => (
                                     <Text style={styles.company}>{job.company}</Text>
                                 </View>
                                 <Text style={styles.dateRange}>
-                                    {formatDateRange(job.startDate, job.endDate)}
+                                    {job.startDate +" "+ job.endDate}
                                 </Text>
                             </View>
                             {job.description && (
@@ -482,7 +469,7 @@ const ResumeFirst: React.FC<{ resumeData: ResumeData }> = ({ resumeData }) => (
                                 </View>
                                 <View>
                                     {edu.graduationDate && (
-                                        <Text style={styles.dateRange}>{formatDate(edu.graduationDate)}</Text>
+                                        <Text style={styles.dateRange}>{edu.graduationDate}</Text>
                                     )}
                                     {edu.gpa && (
                                         <Text style={styles.gpa}>GPA: {edu.gpa}</Text>
@@ -513,10 +500,10 @@ const ResumeFirst: React.FC<{ resumeData: ResumeData }> = ({ resumeData }) => (
                                 <Text style={styles.certIssuer}>{cert.issuer}</Text>
                                 <View>
                                     {cert.date && (
-                                        <Text style={styles.certDetails}>Issued: {formatDate(cert.date)}</Text>
+                                        <Text style={styles.certDetails}>Issued: {cert.date}</Text>
                                     )}
                                     {cert.expiryDate && (
-                                        <Text style={styles.certDetails}>Expires: {formatDate(cert.expiryDate)}</Text>
+                                        <Text style={styles.certDetails}>Expires: {cert.expiryDate}</Text>
                                     )}
                                     {cert.credentialId && (
                                         <Text style={styles.certDetails}>ID: {cert.credentialId}</Text>

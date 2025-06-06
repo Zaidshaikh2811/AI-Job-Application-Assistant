@@ -8,7 +8,7 @@ import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 const Hero = () => {
     return (
-        <section className="flex flex-col md:flex-row items-center justify-between px-6 py-12   max-w-7xl mx-auto">
+        <section className="flex flex-col md:flex-row items-center justify-between px-6  mb-24  max-w-7xl mx-auto">
             {/* Text Content */}
             <div className="md:w-1/2 space-y-6 text-center md:text-left">
                 <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">

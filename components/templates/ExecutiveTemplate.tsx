@@ -121,17 +121,7 @@ const executiveStyles = StyleSheet.create({
 });
 
 export const ExecutiveTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
 
-    const formatDateRange = (startDate: string, endDate: string) => {
-        const start = formatDate(startDate);
-        const end = endDate ? formatDate(endDate) : 'Present';
-        return `${start} - ${end}`;
-    };
 
     return (
         <Document>
@@ -170,7 +160,7 @@ export const ExecutiveTemplate: React.FC<ResumeTemplateProps> = ({ resumeData })
                                             <Text style={styles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={styles.dateRange}>
-                                            {formatDateRange(job.startDate ?? '', job.endDate ?? '')}
+                                            {job.startDate+" "+ job.endDate}
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -231,7 +221,7 @@ export const ExecutiveTemplate: React.FC<ResumeTemplateProps> = ({ resumeData })
                                         <Text style={styles.company}>{edu.institution}</Text>
                                         <View style={styles.jobHeader}>
                                             {edu.graduationDate && (
-                                                <Text style={styles.dateRange}>{formatDate(edu.graduationDate)}</Text>
+                                                <Text style={styles.dateRange}>{edu.graduationDate}</Text>
                                             )}
                                             {edu.gpa && (
                                                 <Text style={styles.dateRange}>GPA: {edu.gpa}</Text>

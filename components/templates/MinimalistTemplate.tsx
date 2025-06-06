@@ -157,17 +157,7 @@ const minimalistStyles = StyleSheet.create({
 });
 
 export const MinimalistTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
 
-    const formatDateRange = (startDate: string, endDate: string) => {
-        const start = formatDate(startDate);
-        const end = endDate ? formatDate(endDate) : 'Present';
-        return `${start} - ${end}`;
-    };
 
     return (
         <Document>
@@ -207,7 +197,7 @@ export const MinimalistTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                             <Text style={minimalistStyles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={minimalistStyles.dateRange}>
-                                            {formatDateRange(job.startDate ?? '', job.endDate ?? '')}
+                                            {job.startDate +''+job.endDate }
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -283,7 +273,7 @@ export const MinimalistTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                         <View style={minimalistStyles.educationDetails}>
                                             {edu.graduationDate && (
                                                 <Text style={minimalistStyles.graduationDate}>
-                                                    {formatDate(edu.graduationDate)}
+                                                    { edu.graduationDate}
                                                 </Text>
                                             )}
                                             {edu.gpa && (

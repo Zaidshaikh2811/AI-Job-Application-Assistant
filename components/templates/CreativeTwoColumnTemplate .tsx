@@ -67,17 +67,6 @@ const twoColumnStyles = StyleSheet.create({
 });
 
 export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }) => {
-    const formatDate = (dateString: string) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
-    };
-
-    const formatDateRange = (startDate: string, endDate: string) => {
-        const start = formatDate(startDate);
-        const end = endDate ? formatDate(endDate) : 'Present';
-        return `${start} - ${end}`;
-    };
 
     return (
         <Document>
@@ -147,7 +136,7 @@ export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resum
                                             <Text style={styles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={styles.dateRange}>
-                                            {formatDateRange(job.startDate || '', job.endDate || '')}
+                                            {job.startDate+" "+ job.endDate}
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -198,7 +187,7 @@ export const CreativeTwoColumnTemplate: React.FC<ResumeTemplateProps> = ({ resum
                                         </View>
                                         <View>
                                             {edu.graduationDate && (
-                                                <Text style={styles.dateRange}>{formatDate(edu.graduationDate)}</Text>
+                                                <Text style={styles.dateRange}>{edu.graduationDate}</Text>
                                             )}
                                             {edu.gpa && (
                                                 <Text style={styles.dateRange}>GPA: {edu.gpa}</Text>
