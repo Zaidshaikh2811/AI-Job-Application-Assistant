@@ -6,10 +6,31 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ExternalLink, Calendar, Building2, Target, CheckCircle, AlertCircle, ChevronRight } from 'lucide-react';
 
-// Component that accepts props from the server component
-const ResumeChecksCards = ({ data, totalResults }) => {
+// Type definitions
+interface KeywordMatch {
+    matched: string[];
+    missing: string[];
+}
 
-    const formatDate = (dateString) => {
+interface ResumeCheck {
+    _id: string;
+    jobTitle?: string;
+    company?: string;
+    createdAt: string;
+    fitRatio: number;
+    keywordMatch: KeywordMatch;
+    skillGaps: string[];
+    jobUrl?: string;
+}
+
+interface ResumeChecksCardsProps {
+    data: ResumeCheck[];
+    totalResults: number;
+}
+
+// Component that accepts props from the server component
+const ResumeChecksCards: React.FC<ResumeChecksCardsProps> = ({ data, totalResults }) => {
+    const formatDate = (dateString: string): string => {
         return new Date(dateString).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
@@ -19,13 +40,13 @@ const ResumeChecksCards = ({ data, totalResults }) => {
         });
     };
 
-    const getFitRatioBadgeVariant = (ratio) => {
+    const getFitRatioBadgeVariant = (ratio: number): "default" | "secondary" | "destructive" => {
         if (ratio >= 80) return 'default';
         if (ratio >= 60) return 'secondary';
         return 'destructive';
     };
 
-    const handleCardClick = (id) => {
+    const handleCardClick = (id: string): void => {
         // For Next.js router
         // router.push(`/resume-checks/${id}`);
 
@@ -36,8 +57,24 @@ const ResumeChecksCards = ({ data, totalResults }) => {
         console.log(`Navigating to resume check: ${id}`);
     };
 
+    // Add safety check for data
+    if (!data) {
+        return (
+            <div className="min-h-screen p-6">
+                <div className="max-w-6xl mx-auto space-y-6">
+                    <div className="text-center py-12">
+                        <Target className="mx-auto h-12 w-12 text-gray-400" />
+                        <h3 className="mt-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            Loading resume checks...
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="min-h-screen     p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
             <div className="max-w-6xl mx-auto space-y-6">
                 {/* Header */}
                 <div className="space-y-2">
@@ -94,9 +131,9 @@ const ResumeChecksCards = ({ data, totalResults }) => {
                                 <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                     <div className="flex items-center gap-1">
                                         <CheckCircle className="h-3 w-3 text-green-500" />
-                                        <span>{check.keywordMatch.matched.length} matched keywords</span>
+                                        <span>{check.keywordMatch?.matched?.length || 0} matched keywords</span>
                                     </div>
-                                    {check.keywordMatch.missing.length > 0 && (
+                                    {check.keywordMatch?.missing && check.keywordMatch.missing.length > 0 && (
                                         <div className="flex items-center gap-1">
                                             <AlertCircle className="h-3 w-3 text-orange-500" />
                                             <span>{check.keywordMatch.missing.length} missing</span>
@@ -111,30 +148,32 @@ const ResumeChecksCards = ({ data, totalResults }) => {
                                 </div>
 
                                 {/* Key Matched Skills Preview */}
-                                <div className="space-y-2">
-                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                        Top Matches:
-                                    </span>
-                                    <div className="flex flex-wrap gap-1">
-                                        {check.keywordMatch.matched.slice(0, 3).map((keyword, index) => (
-                                            <Badge
-                                                key={index}
-                                                variant="secondary"
-                                                className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-                                            >
-                                                {keyword}
-                                            </Badge>
-                                        ))}
-                                        {check.keywordMatch.matched.length > 3 && (
-                                            <Badge variant="outline" className="text-xs">
-                                                +{check.keywordMatch.matched.length - 3} more
-                                            </Badge>
-                                        )}
+                                {check.keywordMatch?.matched && check.keywordMatch.matched.length > 0 && (
+                                    <div className="space-y-2">
+                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                            Top Matches:
+                                        </span>
+                                        <div className="flex flex-wrap gap-1">
+                                            {check.keywordMatch.matched.slice(0, 3).map((keyword, index) => (
+                                                <Badge
+                                                    key={`${check._id}-matched-${index}`}
+                                                    variant="secondary"
+                                                    className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+                                                >
+                                                    {keyword}
+                                                </Badge>
+                                            ))}
+                                            {check.keywordMatch.matched.length > 3 && (
+                                                <Badge variant="outline" className="text-xs">
+                                                    +{check.keywordMatch.matched.length - 3} more
+                                                </Badge>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                )}
 
                                 {/* Skill Gaps Preview */}
-                                {check.skillGaps.length > 0 && (
+                                {check.skillGaps && check.skillGaps.length > 0 && (
                                     <div className="space-y-2">
                                         <span className="text-sm font-medium text-red-700 dark:text-red-400">
                                             Areas for Improvement:
