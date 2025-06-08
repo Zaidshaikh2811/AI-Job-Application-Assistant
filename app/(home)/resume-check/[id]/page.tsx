@@ -194,7 +194,7 @@ export default async function ResumeCheckResultsPage({params}: {params: Promise<
                                         {data.fitRatio}%
                                     </span>
                                 </div>
-                                <ProgressBar value={check.fitRatio} />
+                                <ProgressBar value={data.fitRatio} />
                                 <div className="text-sm text-muted-foreground">
                                     {data.fitRatio >= 80 && "Excellent match! Your resume aligns very well with the job requirements."}
                                     {data.fitRatio >= 60 && data.fitRatio < 80 && "Good match! Consider the suggestions below to improve your score."}
