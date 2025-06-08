@@ -3,7 +3,6 @@
 import React, { useState, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import {
     ExternalLink,
@@ -80,6 +79,16 @@ const ResumeChecksCards: React.FC<ResumeChecksCardsProps> = ({
         window.location.href = `/resume-check/${id}`;
         console.log(`Navigating to resume check: ${id}`);
     }, []);
+
+    // Custom Progress Bar Component
+    const ProgressBar: React.FC<{ value: number; className?: string }> = ({ value, className = "" }) => (
+        <div className={`w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 ${className}`}>
+            <div
+                className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-in-out"
+                style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+            ></div>
+        </div>
+    );
 
     // Pagination component
     const PaginationControls: React.FC = () => {
@@ -289,7 +298,7 @@ const ResumeChecksCards: React.FC<ResumeChecksCardsProps> = ({
                                                     <span className="font-medium">Compatibility Score</span>
                                                     <span>{check.fitRatio}%</span>
                                                 </div>
-                                                <Progress value={check.fitRatio} className="h-2" />
+                                                <ProgressBar value={check.fitRatio} />
                                             </div>
 
                                             {/* Quick Stats Row */}

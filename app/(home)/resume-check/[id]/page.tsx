@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import {
@@ -19,6 +19,7 @@ import {
     User
 } from "lucide-react";
 import { getResumeCheckResult } from "@/actions/resume";
+import React from "react";
 
 export const metadata = {
     title: "Resume Check Results",
@@ -111,6 +112,16 @@ export default async function ResumeCheckResultsPage({params}: {params: Promise<
             return "bg-red-100 border-red-200";
         };
 
+
+        const ProgressBar: React.FC<{ value: number; className?: string }> = ({ value, className = "" }) => (
+            <div className={`w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 ${className}`}>
+                <div
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-in-out"
+                    style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+                ></div>
+            </div>
+        );
+
         return (
             <div className="container space-y-6 py-6">
                 {/* Header */}
@@ -183,7 +194,7 @@ export default async function ResumeCheckResultsPage({params}: {params: Promise<
                                         {data.fitRatio}%
                                     </span>
                                 </div>
-                                <Progress value={data.fitRatio} className="h-3" />
+                                <ProgressBar value={check.fitRatio} />
                                 <div className="text-sm text-muted-foreground">
                                     {data.fitRatio >= 80 && "Excellent match! Your resume aligns very well with the job requirements."}
                                     {data.fitRatio >= 60 && data.fitRatio < 80 && "Good match! Consider the suggestions below to improve your score."}
