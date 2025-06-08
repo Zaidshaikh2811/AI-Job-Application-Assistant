@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { GenerateResumeParams, ResumeData } from '@/lib/types/resume.types';
 import { AIServiceError } from '@/lib/types/resume.types';
 
+// Technical and business keywords for extraction
 const TECH_KEYWORDS = [
     'react', 'angular', 'vue', 'nodejs', 'python', 'java', 'javascript', 'typescript',
     'aws', 'azure', 'docker', 'kubernetes', 'git', 'sql', 'mongodb', 'postgresql',
@@ -14,63 +15,51 @@ const BUSINESS_KEYWORDS = [
     'growth', 'performance', 'scalability', 'collaboration', 'leadership', 'mentor'
 ] as const;
 
+// Extracts up to 15 relevant keywords from job description and title
 function extractKeywords(jobDescription: string, jobTitle: string): string[] {
     const text = `${jobDescription} ${jobTitle}`.toLowerCase();
     const allKeywords = [...TECH_KEYWORDS, ...BUSINESS_KEYWORDS];
-
     const foundKeywords = allKeywords.filter(keyword => text.includes(keyword));
-
-    // Add specific keywords from job title and description
     const customKeywords = text
         .match(/\b[a-z]{3,}\b/g)
         ?.filter(word =>
-            !['the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'new', 'now', 'old', 'see', 'two', 'way', 'who', 'boy', 'did', 'its', 'let', 'put', 'say', 'she', 'too', 'use'].includes(word)
+            ![
+                'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one',
+                'our', 'out', 'day', 'get', 'has', 'him', 'his', 'how', 'man', 'new', 'now', 'old', 'see',
+                'two', 'way', 'who', 'boy', 'did', 'its', 'let', 'put', 'say', 'she', 'too', 'use'
+            ].includes(word)
         ) || [];
-
     return [...new Set([...foundKeywords, ...customKeywords])].slice(0, 15);
 }
 
+// Builds a detailed, ATS-optimized prompt for the AI
 function createOptimizedPrompt(params: GenerateResumeParams, keywords: string[]): string {
     const {
-        jobDescription,
-        personalName,
-        email,
-        phone,
-        linkedin,
-        jobTitle,
-        companyName,
-        jobLocation,
-        tone,
-        workExperiences,
-        technicalSkills,
-        softSkills,
-        education,
-        certifications,
-        projects,
-        experienceLevel,
+        jobDescription, personalName, email, phone, linkedin, jobTitle, companyName, jobLocation, tone,
+        workExperiences, technicalSkills, softSkills, education, certifications, projects, experienceLevel,
     } = params;
 
-    return `Generate an ATS-optimized resume for ${personalName} applying for ${jobTitle} at ${companyName}.
+    return `You are an expert resume writer. Generate an ATS-optimized resume in JSON format for the following candidate and job:
 
-CANDIDATE PROFILE:
-Name: ${personalName}
-Email: ${email}
-Phone: ${phone || 'Not provided'}
-LinkedIn: ${linkedin || 'Not provided'}
-Experience Level: ${experienceLevel}
-Target Role: ${jobTitle} at ${companyName} (${jobLocation || 'Remote'})
-Tone: ${tone}
+CANDIDATE DETAILS:
+- Name: ${personalName}
+- Email: ${email}
+- Phone: ${phone || 'Not provided'}
+- LinkedIn: ${linkedin || 'Not provided'}
+- Experience Level: ${experienceLevel}
+- Target Role: ${jobTitle} at ${companyName} (${jobLocation || 'Remote'})
+- Tone: ${tone}
 
-JOB REQUIREMENTS (focus on these keywords):
+JOB DESCRIPTION (focus on these keywords):
 ${jobDescription.substring(0, 1200)}
 
-KEY KEYWORDS TO INCORPORATE: ${keywords.slice(0, 10).join(', ')}
+KEYWORDS TO INCORPORATE: ${keywords.slice(0, 10).join(', ')}
 
 WORK EXPERIENCE:
 ${workExperiences.map((exp, i) => `
 ${i + 1}. ${exp.jobTitle} at ${exp.company} (${exp.startDate} - ${exp.endDate})
-   Description: ${exp.description}
-   Achievements: ${exp.achievements?.join(' | ') || 'Multiple achievements'}
+   Description: ${(exp.description || '').substring(0, 250)}
+   Achievements: ${(exp.achievements?.map(a => a.substring(0, 100)).join(' | ')) || 'Multiple achievements'}
    Technologies: ${exp.technologies?.join(', ') || 'Various technologies'}
 `).join('')}
 
@@ -84,17 +73,16 @@ CERTIFICATIONS:
 ${certifications.map(cert => `• ${cert.name} by ${cert.issuer} (${cert.date})`).join('\n')}
 
 PROJECTS:
-${projects.map(proj => `• ${proj.name}: ${proj.description} [${proj.technologies?.join(', ')}]`).join('\n')}
+${projects.map(proj => `• ${proj.name}: ${(proj.description || '').substring(0, 200)} [${proj.technologies?.join(', ')}]`).join('\n')}
+INSTRUCTIONS:
+1. Write a compelling professional summary using the provided keywords.
+2. Optimize work experience with quantified, metric-driven achievements.
+3. Include all required sections: summary, workExperience, skills, education, certifications, projects, contactInformation, languages, achievements.
+4. Use exact keywords from the job description naturally throughout.
+5. Ensure the resume is ATS-friendly and clearly formatted.
+6. Tailor all content specifically for the ${jobTitle} role.
 
-REQUIREMENTS:
-1. Create a compelling professional summary incorporating keywords: ${keywords.slice(0, 6).join(', ')}
-2. Optimize work experience with quantified achievements (use metrics, percentages, numbers)
-3. Ensure ALL required sections are included and properly structured
-4. Use exact keywords from the job description naturally
-5. Make content ATS-friendly with clear formatting
-6. Tailor content specifically for ${jobTitle} role
-
-CRITICAL: Return ONLY valid JSON with this exact structure:
+IMPORTANT: Return ONLY valid JSON in this exact structure:
 {
   "summary": "Professional summary with keywords",
   "workExperience": [{"jobTitle": "", "company": "", "startDate": "", "endDate": "", "description": "", "achievements": [], "technologies": []}],
@@ -105,14 +93,15 @@ CRITICAL: Return ONLY valid JSON with this exact structure:
   "contactInformation": {"name": "", "email": "", "phone": "", "linkedin": ""},
   "languages": [],
   "achievements": []
-}`;
+}
+Do not include any explanation or extra text. Output only the JSON.`;
 }
 
+// Ensures all required resume fields are present, using fallbacks if needed
 function ensureCompleteResume(resumeData: Partial<ResumeData>, params: GenerateResumeParams): ResumeData {
     const {
-        personalName, email, phone, linkedin, workExperiences,
-        technicalSkills, softSkills, education, certifications,
-        projects, languages, achievements, jobTitle, experienceLevel
+        personalName, email, phone, linkedin, workExperiences, technicalSkills, softSkills,
+        education, certifications, projects, languages, achievements, jobTitle, experienceLevel
     } = params;
 
     return {
@@ -124,7 +113,7 @@ function ensureCompleteResume(resumeData: Partial<ResumeData>, params: GenerateR
             : workExperiences.length > 0
                 ? workExperiences
                 : [{
-                    jobTitle: jobTitle,
+                    jobTitle,
                     company: 'Previous Company',
                     startDate: '01/2020',
                     endDate: 'Present',
@@ -138,14 +127,14 @@ function ensureCompleteResume(resumeData: Partial<ResumeData>, params: GenerateR
                 }],
 
         skills: {
-            technical: resumeData.skills?.technical?.length ?
-                resumeData.skills.technical :
-                (technicalSkills.length ? technicalSkills : [
+            technical: resumeData.skills?.technical?.length
+                ? resumeData.skills.technical
+                : (technicalSkills.length ? technicalSkills : [
                     'JavaScript', 'React', 'Node.js', 'Python', 'SQL', 'AWS', 'Docker', 'Git'
                 ]),
-            soft: resumeData.skills?.soft?.length ?
-                resumeData.skills.soft :
-                (softSkills.length ? softSkills : [
+            soft: resumeData.skills?.soft?.length
+                ? resumeData.skills.soft
+                : (softSkills.length ? softSkills : [
                     'Leadership', 'Communication', 'Problem Solving', 'Team Collaboration', 'Adaptability'
                 ])
         },
@@ -188,7 +177,7 @@ function ensureCompleteResume(resumeData: Partial<ResumeData>, params: GenerateR
 
         contactInformation: {
             name: personalName,
-            email: email,
+            email,
             phone: phone || '',
             linkedin: linkedin || ''
         },
@@ -207,6 +196,7 @@ function ensureCompleteResume(resumeData: Partial<ResumeData>, params: GenerateR
     };
 }
 
+// Main function: generates a complete, ATS-optimized resume as JSON
 export async function generateResumeFromJobData(params: GenerateResumeParams): Promise<string> {
     if (!process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
         throw new AIServiceError('Gemini API key not configured');
@@ -241,15 +231,12 @@ export async function generateResumeFromJobData(params: GenerateResumeParams): P
         try {
             resumeData = JSON.parse(responseText);
         } catch (parseError) {
-            console.log('JSON parse error, attempting to fix...', parseError);
-
-            // Try to extract JSON from response
+            // Attempt to extract JSON from the response
             const jsonMatch = responseText.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
                 try {
                     resumeData = JSON.parse(jsonMatch[0]);
                 } catch {
-                    console.log('Fallback parsing failed, using manual generation');
                     resumeData = {};
                 }
             } else {
@@ -259,18 +246,13 @@ export async function generateResumeFromJobData(params: GenerateResumeParams): P
 
         // Ensure all required sections are present with fallbacks
         const completeResume = ensureCompleteResume(resumeData, params);
-
         return JSON.stringify(completeResume, null, 2);
 
     } catch (error) {
-        console.error('Gemini API Error:', error);
-
         if (error instanceof AIServiceError) {
             throw error;
         }
-
-        // For any other error, generate fallback resume
-        console.log('Generating fallback resume due to API error');
+        // Fallback: generate resume from provided params
         const fallbackResume = ensureCompleteResume({}, params);
         return JSON.stringify(fallbackResume, null, 2);
     }

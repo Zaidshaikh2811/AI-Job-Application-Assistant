@@ -60,10 +60,13 @@
     "@types/jspdf": "^1.3.3",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
+    "@types/pdfjs-dist": "^2.10.377",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "mammoth": "^1.9.1",
+    "pdfjs-dist": "^5.3.31",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"

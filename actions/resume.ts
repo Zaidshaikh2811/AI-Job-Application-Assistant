@@ -5,6 +5,7 @@ import dbConnect from "@/lib/mongodb";
 import { isValidObjectId } from "mongoose";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import ResumeCheckResult from "@/lib/models/ResumeCheckResult";
 
 export const getIndividualResume = async (id: string) => {
     try {
@@ -293,6 +294,86 @@ export const deleteResume = async (id: string) => {
         return {
             success: false,
             message: err instanceof Error ? err.message : "Failed to delete resume"
+        };
+    }
+};
+
+
+interface ResumeCheckData {
+    jobTitle: string;
+    company: string;
+    jobUrl: string;
+    fitRatio: number;
+    keywordMatch: {
+        matched?: string[];
+        missing?: string[];
+    };
+    suggestions: {
+        sections?: Record<string, unknown>;
+        general?: string[];
+    };
+    skillGaps?: string[];
+    strengths?: string[];
+    resp?: unknown;
+}
+
+export const saveResumeCheck = async (data: ResumeCheckData) => {
+    try {
+        await dbConnect();
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token")?.value;
+
+        if (!token) {
+            return {
+                success: false,
+                message: "Authentication required"
+            };
+        }
+
+        const decodedToken = jwt.decode(token) as { userId?: string } | null;
+        if (!decodedToken?.userId) {
+            return {
+                success: false,
+                message: "Invalid user session"
+            };
+        }
+        console.log("Decoded Token:", data.resp);
+
+        const resumeCheckResult = new ResumeCheckResult({
+            userId: decodedToken.userId,
+            jobTitle: data.jobTitle,
+            company: data.company,
+            jobUrl: data.jobUrl,
+            fitRatio: data.fitRatio,
+            keywordMatch: {
+                matched: data.keywordMatch.matched || [],
+                missing: data.keywordMatch.missing || []
+            },
+            suggestions: {
+                sections: data.suggestions.sections || {},
+                general: data.suggestions.general || []
+            },
+            skillGaps: data.skillGaps || [],
+            strengths: data.strengths || [],
+            createdAt: new Date()
+        });
+
+        // Save to database
+        const savedResult = await resumeCheckResult.save();
+
+        console.log("Resume check result saved:", savedResult._id);
+
+        return {
+            id: savedResult._id.toString(),
+            success: true,
+            message: "Resume analysis saved successfully"
+        };
+    } catch (err: unknown) {
+        console.error("Error saving resume check:", err);
+        return {
+            success: false,
+            message: err instanceof Error ? err.message : "Failed to save resume check"
         };
     }
 };

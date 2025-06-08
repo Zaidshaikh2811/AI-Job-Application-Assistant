@@ -53,6 +53,7 @@ const Navbar: React.FC = () => {
     const authenticatedLinks: NavigationLink[] = [
         { href: '/dashboard', label: 'Projects', icon: FolderOpen },
         { href: '/resume', label: 'Resume', icon: FileText },
+        { href: '/resume-check', label: 'resume-check   ', icon: FileText },
         { href: '/profile', label: 'Profile', icon: User },
     ]
 

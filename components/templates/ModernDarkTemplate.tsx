@@ -205,17 +205,17 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                     <View style={modernDarkStyles.contactContainer}>
                         {resumeData.contactInformation.email && (
                             <Text style={modernDarkStyles.contactItem}>
-                                📧 {resumeData.contactInformation.email}
+                                  {resumeData.contactInformation.email}
                             </Text>
                         )}
                         {resumeData.contactInformation.phone && (
                             <Text style={modernDarkStyles.contactItem}>
-                                📞 {resumeData.contactInformation.phone}
+                                  {resumeData.contactInformation.phone}
                             </Text>
                         )}
                         {resumeData.contactInformation.linkedin && (
                             <Text style={modernDarkStyles.contactItem}>
-                                💼 LinkedIn
+                                  LinkedIn
                             </Text>
                         )}
                     </View>
@@ -226,7 +226,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                     {/* Experience */}
                     {resumeData.workExperience.length > 0 && (
                         <View style={modernDarkStyles.section}>
-                            <Text style={modernDarkStyles.sectionTitle}>💼 EXPERIENCE</Text>
+                            <Text style={modernDarkStyles.sectionTitle}>  EXPERIENCE</Text>
                             {resumeData.workExperience.map((job, index) => (
                                 <View key={index} style={modernDarkStyles.jobContainer}>
                                     <View style={modernDarkStyles.jobHeader}>
@@ -235,7 +235,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                             <Text style={modernDarkStyles.company}>{job.company}</Text>
                                         </View>
                                         <Text style={modernDarkStyles.dateRange}>
-                                            {job.startDate +''+job.endDate }
+                                            {job.startDate +'  '+job.endDate }
                                         </Text>
                                     </View>
                                     {job.description && (
@@ -245,7 +245,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                                         <View>
                                             {job.achievements.map((achievement, idx) => (
                                                 <Text key={idx} style={modernDarkStyles.achievement}>
-                                                    ⭐ {achievement}
+                                                      {achievement}
                                                 </Text>
                                             ))}
                                         </View>
@@ -267,7 +267,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                     {/* Skills */}
                     {(resumeData.skills.technical.length > 0 || resumeData.skills.soft.length > 0) && (
                         <View style={modernDarkStyles.section}>
-                            <Text style={modernDarkStyles.sectionTitle}>💻 SKILLS</Text>
+                            <Text style={modernDarkStyles.sectionTitle}>  SKILLS</Text>
                             <View style={modernDarkStyles.skillsGrid}>
                                 {resumeData.skills.technical.length > 0 && (
                                     <View style={modernDarkStyles.skillColumn}>
@@ -304,7 +304,7 @@ export const ModernDarkTemplate: React.FC<ResumeTemplateProps> = ({ resumeData }
                     {/* Education */}
                     {resumeData.education.length > 0 && (
                         <View style={modernDarkStyles.section}>
-                            <Text style={modernDarkStyles.sectionTitle}>🎓 EDUCATION</Text>
+                            <Text style={modernDarkStyles.sectionTitle}>   EDUCATION</Text>
                             {resumeData.education.map((edu, index) => (
                                 <View key={index} style={modernDarkStyles.educationItem}>
                                     <View style={modernDarkStyles.educationHeader}>
