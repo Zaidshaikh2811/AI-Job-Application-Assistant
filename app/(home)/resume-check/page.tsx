@@ -8,7 +8,7 @@ export default async function ResumeChecksPage() {
     return (
         <ResumeChecksCards
             data={data.data || data}
-            totalResults={data.total || data.length}
+            totalResults={data.totalResults }
         />
     );
 }
