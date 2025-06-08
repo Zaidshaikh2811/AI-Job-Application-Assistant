@@ -1,14 +1,32 @@
+// ResumeChecksPage.tsx
 import { getpaginatedResumeChecks } from "@/actions/resume";
-import ResumeChecksCards from "./ResumeChecksCards"; // Import the client component
+import ResumeChecksCards from "./ResumeChecksCards";
+import { redirect } from "next/navigation";
 
-// Server component that fetches data
-export default async function ResumeChecksPage() {
-    const data = await getpaginatedResumeChecks(1, 10);
-    console.log("Fetched data for resume checks:", data);
+interface Props {
+    searchParams: Promise<{ page?: string }>;
+}
+
+export default async function ResumeChecksPage({ searchParams }: Props) {
+    const resolvedSearchParams = await searchParams;
+    const currentPage = Number(resolvedSearchParams.page) || 1;
+    const limit = 10;
+
+    const data = await getpaginatedResumeChecks(currentPage, limit);
+
+    if (!data ||!data.totalPages || data.totalPages < currentPage) {
+        redirect("/resume-checks?page=1");
+    }
+
     return (
-        <ResumeChecksCards
-            data={data.data || data}
-            totalResults={data.totalResults }
-        />
+        <div>
+            <ResumeChecksCards
+                data={data.data}
+                totalResults={data.totalResults}
+                totalPages={data.totalPages}
+                currentPage={data.currentPage}
+                isLoading={false}
+            />
+        </div>
     );
 }
