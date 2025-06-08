@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import React, {  useState} from "react";
 import { Separator } from "@/components/ui/separator";
 import { saveResumeCheck } from "@/actions/resume";
+ import {useRouter} from "next/navigation";
 
 type LoadingState = 'idle' | 'analyzing' | 'saving' | 'success';
 type ErrorType = 'file' | 'analysis' | 'save' | 'validation' | 'network';
@@ -20,6 +21,7 @@ interface ErrorState {
 
 export default function ResumeCheckPage() {
     const [resumeFile, setResumeFile] = useState<File | null>(null);
+    const router = useRouter()
     const [jobDescription, setJobDescription] = useState("");
     const [jobUrl, setJobUrl] = useState("");
     const [jobTitle, setJobTitle] = useState("");
@@ -30,7 +32,12 @@ export default function ResumeCheckPage() {
     const [error, setError] = useState<ErrorState | null>(null);
     const [successMessage, setSuccessMessage] = useState<string>("");
 
-
+    const isFormValid = (): boolean => {
+        return !!(
+            resumeFile &&
+            (jobDescription.trim() && jobUrl.trim() && jobTitle.trim() && company.trim())
+        );
+    };
 
     // File validation
     const validateFile = (file: File): boolean => {
@@ -154,7 +161,6 @@ export default function ResumeCheckPage() {
             if (!saveResult) {
                 throw new Error('Failed to save analysis results');
             }
-
             // Success
             setLoadingState('success');
             setSuccessMessage('Resume analysis completed successfully! Check your dashboard for detailed results.');
@@ -163,6 +169,7 @@ export default function ResumeCheckPage() {
             // Reset loading state after showing success
             setTimeout(() => {
                 setLoadingState('idle');
+            router.push(`/resume-check/${saveResult.id}` );
             }, 3000);
 
         } catch (error : unknown) {
@@ -400,7 +407,7 @@ export default function ResumeCheckPage() {
                         </Button>
                         <Button
                             type="submit"
-                            disabled={!resumeFile || isLoading}
+                            disabled={!isFormValid() || isLoading}
                             className={isSuccess ? "bg-green-600 hover:bg-green-700" : ""}
                         >
                             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

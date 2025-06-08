@@ -377,3 +377,59 @@ export const saveResumeCheck = async (data: ResumeCheckData) => {
         };
     }
 };
+
+
+
+export const getResumeCheckResult = async (id: string) => {
+    try{
+        await dbConnect();
+
+        if (!isValidObjectId(id)) {
+            return {
+                success: false,
+                message: "Invalid Resume Check ID format"
+            };
+        }
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token")?.value;
+
+        if (!token) {
+            return {
+                success: false,
+                message: "Authentication required"
+            };
+        }
+
+        const decodedToken = jwt.decode(token) as { userId?: string } | null;
+        if (!decodedToken?.userId) {
+            return {
+                success: false,
+                message: "Invalid user session"
+            };
+        }
+
+        const result = await ResumeCheckResult.findOne({ _id: id, userId: decodedToken.userId }).lean();
+
+        if (!result) {
+            return {
+                success: false,
+                message: "Resume check result not found or you don't have permission to access it"
+            };
+        }
+
+        return {
+            success: true,
+            message: "Resume check result fetched successfully",
+            data: JSON.parse(JSON.stringify(result))
+        };
+
+    }
+    catch (error) {
+        console.error("Error fetching resume check result:", error);
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : "Failed to fetch resume check result"
+        };
+    }
+}

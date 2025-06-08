@@ -118,6 +118,11 @@ const Navbar: React.FC = () => {
                         <FileText className="mr-2 h-4 w-4" />
                         <span>Resume</span>
                     </Link>
+                </DropdownMenuItem> <DropdownMenuItem asChild className="cursor-pointer">
+                    <Link href="/resume-check" className="flex items-center">
+                        <FileText className="mr-2 h-4 w-4" />
+                        <span>resume-check</span>
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
