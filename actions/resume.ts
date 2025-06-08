@@ -433,3 +433,55 @@ export const getResumeCheckResult = async (id: string) => {
         };
     }
 }
+
+
+export const getpaginatedResumeChecks = async (page: number, limit: number) => {
+    try{
+        await dbConnect();
+
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token")?.value;
+
+        if (!token) {
+            return {
+                success: false,
+                message: "Authentication required"
+            };
+        }
+
+        const decodedToken = jwt.decode(token) as { userId?: string } | null;
+        if (!decodedToken?.userId) {
+            return {
+                success: false,
+                message: "Invalid user session"
+            };
+        }
+
+        const skip = (page - 1) * limit;
+
+        const results = await ResumeCheckResult.find({ userId: decodedToken.userId })
+            .sort({ createdAt: -1 }) // Sort by most recent
+            .skip(skip)
+            .limit(limit)
+            .lean();
+
+        const totalResults = await ResumeCheckResult.countDocuments({ userId: decodedToken.userId });
+
+        return {
+            success: true,
+            message: "Paginated resume checks fetched successfully",
+            data: JSON.parse(JSON.stringify(results)),
+            totalResults,
+            totalPages: Math.ceil(totalResults / limit),
+            currentPage: page
+        };
+
+    }
+    catch (error) {
+        console.error("Error fetching paginated resume checks:", error);
+        return {
+            success: false,
+            message: error instanceof Error ? error.message : "Failed to fetch paginated resume checks"
+        };
+    }
+}
